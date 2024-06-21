@@ -11,6 +11,7 @@ use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\GerenteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\SobreController;
 use App\Models\Agendamento;
 use App\Models\Cadastrar;
@@ -137,6 +138,8 @@ Route::put('/agendamentos/{id}', 'App\Http\Controllers\AgendamentoController@upd
 Route::put('/funcionario/desativar/{id}', 'App\Http\Controllers\GerenteController@updateStatusFuncionarioDesativar')->name('funcionario.desativar');
 Route::put('/funcionario/ativar/{id}', 'App\Http\Controllers\GerenteController@updateStatusFuncionarioAtivar')->name('funcionario.ativar');
 Route::get('/cliente/{id}', [ClienteController::class, 'show'])->name('cliente.show');
+Route::get('/servico/show', [ServicoController::class, 'show'])->name('servico.show');
+
 
 Route::get('/emailFuncionario', [AgendamentoController::class, 'getEmailFunc'])->name('email.func');
 
