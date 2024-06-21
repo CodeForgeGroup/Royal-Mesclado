@@ -253,6 +253,8 @@ class GerenteController extends Controller
 
 
         $numeroFormatado = $request->dddFuncionario . $request->numeroFuncionario;
+        $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
+
 
         // $testeDDD = $request->dddFuncionario;
         // $testeNumero = $request->numeroFuncionario;
@@ -297,7 +299,6 @@ class GerenteController extends Controller
         $imagem_url = $imagem->store('imagem', 'public');
 
 
-        $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
 
         $gerente->update([
             'fotoFuncionario' => $imagem_url,

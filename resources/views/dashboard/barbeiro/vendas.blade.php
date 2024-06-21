@@ -4,6 +4,11 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard/css/style.css') }}">
 
+<style>
+    .topo{
+        color: #ff6d24;
+    }
+</style>
 
 @section('conteudo')
     <!-- Navbar -->
@@ -50,7 +55,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">quantidade de produto</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">quantidade de produto</p>
                                     <h5 class="text-white font-weight-bolder mb-0">
                                         {{ $vendasTotal }}
 
@@ -79,7 +84,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Quantidade de Registros</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Quantidade de Registros</p>
                                     <h5 class=" text-white font-weight-bolder mb-0">
                                         {{ $clientesTotal }}
                                         @if ($porcentagemCliente >= 0)
@@ -107,7 +112,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Comissão</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Comissão</p>
                                     <h5 class="text-white font-weight-bolder mb-0">
                                         R$ {{ number_format($comissao, 2, ',', '.') }}
                                         @if ($porcentagemComissao >= 0)
@@ -135,7 +140,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Mais vendido / quantidade</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Mais vendido / quantidade</p>
                                     <h5 class="text-white font-weight-bolder mb-0">
                                         @if ($produtoMaisVendido == null)
                                             Sem vendas!
