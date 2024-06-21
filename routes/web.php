@@ -136,7 +136,10 @@ Route::put('/agendamentos/{id}', 'App\Http\Controllers\AgendamentoController@upd
 
 Route::put('/funcionario/desativar/{id}', 'App\Http\Controllers\GerenteController@updateStatusFuncionarioDesativar')->name('funcionario.desativar');
 Route::put('/funcionario/ativar/{id}', 'App\Http\Controllers\GerenteController@updateStatusFuncionarioAtivar')->name('funcionario.ativar');
+Route::get('/cliente/{id}', [ClienteController::class, 'show'])->name('cliente.show');
 
 Route::get('/emailFuncionario', [AgendamentoController::class, 'getEmailFunc'])->name('email.func');
 
 Route::get('/emailCliente', [AgendamentoController::class, 'getEmailCli'])->name('email.cliente');
+
+Route::post('/loginApi', [LoginController::class, 'login'])->name('login.api');

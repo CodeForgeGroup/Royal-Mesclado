@@ -193,9 +193,17 @@ public function perfilEdit($id)
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show($id)
     {
-        //
+        $cliente = Cliente::find($id);
+
+        if ($cliente === null){
+            if (is_null($cliente)) {
+                return response()->json(['message' => 'Cliente não encontrado'], 404);
+            }
+        }
+
+        return response()->json($cliente);
     }
 
     /**

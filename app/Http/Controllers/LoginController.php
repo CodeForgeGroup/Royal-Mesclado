@@ -121,13 +121,13 @@ class LoginController extends Controller
                         'nome' => $usuario->nome,
                         'email' => $usuario->email,
                         'tipo_usuario' => $usuario->tipo_usuario_type,
-                        'dados_aluno' => [
+                        'dados_cliente' => [
                             'id' => $cliente->id,
                             'nome' => $cliente->nomeCliente,
                             'email' => $cliente->emailCliente,
                         ],
                     ],
-                    'acess_token' => $token, 
+                    'acess_token' => $token,
                     'token_type' => 'Bearer',
                 ]);
             }
