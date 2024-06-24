@@ -343,6 +343,71 @@ class GerenteController extends Controller
         $gerente = Funcionario::find($id);
 
 
+
+        $request->validate([
+            'nomeFuncionario' => 'required|string|max:255',
+            'sobrenomeFuncionario' => 'required|string|max:255',
+            'especialidadeFuncionario' => 'required|string|max:255',
+            'inicioExpedienteFuncionario' => 'required|date_format:H:i',
+            'fimExpedienteFuncionario' => 'required|date_format:H:i|after:inicioExpedienteFuncionario',
+            'salarioFuncionario' => 'required|numeric|min:0',
+            'emailFuncionario' => 'required|email|max:255|unique:usuarios,email,'.$id,
+            'senhaFuncionario' => 'required|string|min:6',
+            'dddFuncionario' => 'required|digits:2',
+            'telefoneFuncionario' => 'required|digits:9',
+            'dataNascFuncionario' => 'required|date',
+            'descricaoFuncionario' => 'required|max:255',
+            'cargoFuncionario' => 'required|string|in:barbeiro,gerente',
+            'statusFuncionario' => 'required|string|in:ATIVO,DESATIVO',
+        ], [
+
+            'nomeFuncionario.required' => 'O campo Nome é obrigatório.',
+            'nomeFuncionario.string' => 'O campo Nome deve ser uma string.',
+            'nomeFuncionario.max' => 'O campo Nome não pode ter mais de 255 caracteres.',
+
+            'sobrenomeFuncionario.required' => 'O campo Sobrenome é obrigatório.',
+            'sobrenomeFuncionario.string' => 'O campo Sobrenome deve ser uma string.',
+            'sobrenomeFuncionario.max' => 'O campo Sobrenome não pode ter mais de 255 caracteres.',
+
+            'especialidadeFuncionario.required' => 'O campo de especialidade é obrigatório.',
+            'especialidadeFuncionario.string' => 'O campo de especialidade deve ser uma string.',
+            'especialidadeFuncionario.max' => 'O campo de especialidade não pode ter mais de 255 caracteres.',
+
+            'inicioExpedienteFuncionario.required' => 'O campo de início de expediente é obrigatório.',
+            'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto".',
+
+            'fimExpedienteFuncionario.required' => 'O campo de fim de expediente é obrigatório.',
+            'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto".',
+            'fimExpedienteFuncionario.after' => 'O campo de fim de expediente deve ser uma hora após o início do expediente.',
+
+            'salarioFuncionario.required' => 'O campo de salário é obrigatório.',
+            'salarioFuncionario.numeric' => 'O campo de salário deve ser numérico.',
+            'salarioFuncionario.min' => 'O campo de salário deve ser no mínimo 0.',
+
+            'emailFuncionario.required' => 'O campo de email é obrigatório.',
+            'emailFuncionario.email' => 'O campo de email deve ser um email válido.',
+            'emailFuncionario.max' => 'O campo de email não pode ter mais de 255 caracteres.',
+            'emailFuncionario.unique' => 'Este email já está em uso.',
+
+            'senhaFuncionario.required' => 'O campo de senha é obrigatório.',
+            'senhaFuncionario.string' => 'O campo de senha deve ser uma string.',
+            'senhaFuncionario.min' => 'O campo de senha deve ter no mínimo 6 caracteres.',
+
+            'dddFuncionario.required' => 'O campo de DDD é obrigatório.',
+            'dddFuncionario.digits' => 'O campo de DDD deve ter 2 dígitos.',
+
+            'telefoneFuncionario.required' => 'O campo de telefone é obrigatório.',
+            'telefoneFuncionario.digits' => 'O campo de telefone deve ter 9 dígitos.',
+
+            'dataNascFuncionario.required' => 'O campo de data de nascimento é obrigatório.',
+            'dataNascFuncionario.date' => 'O campo de data de nascimento deve ser uma data válida.',
+
+            'descricaoFuncionario.required' => 'O campo de descrição é obrigatório.',
+            'descricaoFuncionario.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+
+        ]);
+
+
         $numeroFormatado = $request->dddFuncionario . $request->numeroFuncionario;
 
         // $testeDDD = $request->dddFuncionario;
@@ -782,6 +847,11 @@ class GerenteController extends Controller
 
         $senha = Usuario::where('tipo_usuario_id', $id)->first();
 
+
+
+
+
+
         return view('dashboard.gerente.editFunc', compact('funcionario','senha'));
     }
 
@@ -954,6 +1024,83 @@ public function updateStatusServicoAtivar(Request $request, $id)
         //  $request->validate($this->funcionario->Regras(), $this->funcionario->Feedback());
 
         //  $imagem = $request->input('fotoFuncionario');
+
+
+
+        $request->validate([
+            'fotoFuncionario' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'nomeFuncionario' => 'required|string|max:255',
+            'sobrenomeFuncionario' => 'required|string|max:255',
+            'especialidadeFuncionario' => 'required|string|max:255',
+            'inicioExpedienteFuncionario' => 'required|date_format:H:i',
+            'fimExpedienteFuncionario' => 'required|date_format:H:i|after:inicioExpedienteFuncionario',
+            'salarioFuncionario' => 'required|numeric|min:0',
+            'emailFuncionario' => 'required|email|max:255|unique:usuarios,email',
+            'senhaFuncionario' => 'required|string|min:6|confirmed',
+            'dddFuncionario' => 'required|digits:2',
+            'telefoneFuncionario' => 'required|digits:9',
+            'dataNascFuncionario' => 'required|date',
+            'descricaoFuncionario' => 'required|max:255',
+            'cargoFuncionario' => 'required|string|in:barbeiro,gerente',
+            'statusFuncionario' => 'required|string|in:ATIVO,DESATIVO',
+        ], [
+            // Mensagens de erro personalizadas
+            'fotoFuncionario.image' => 'O arquivo deve ser uma imagem.',
+            'fotoFuncionario.mimes' => 'A imagem deve ser dos tipos: jpeg, png, jpg, gif.',
+            'fotoFuncionario.max' => 'A imagem não pode ser maior que 2MB.',
+
+            'nomeFuncionario.required' => 'O campo Nome é obrigatório.',
+            'nomeFuncionario.string' => 'O campo Nome deve ser uma string.',
+            'nomeFuncionario.max' => 'O campo Nome não pode ter mais de 255 caracteres.',
+
+            'sobrenomeFuncionario.required' => 'O campo Sobrenome é obrigatório.',
+            'sobrenomeFuncionario.string' => 'O campo Sobrenome deve ser uma string.',
+            'sobrenomeFuncionario.max' => 'O campo Sobrenome não pode ter mais de 255 caracteres.',
+
+            'especialidadeFuncionario.required' => 'O campo de especialidade é obrigatório.',
+            'especialidadeFuncionario.string' => 'O campo de especialidade deve ser uma string.',
+            'especialidadeFuncionario.max' => 'O campo de especialidade não pode ter mais de 255 caracteres.',
+
+            'inicioExpedienteFuncionario.required' => 'O campo de início de expediente é obrigatório.',
+            'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto".',
+
+            'fimExpedienteFuncionario.required' => 'O campo de fim de expediente é obrigatório.',
+            'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto".',
+            'fimExpedienteFuncionario.after' => 'O campo de fim de expediente deve ser uma hora após o início do expediente.',
+
+            'salarioFuncionario.required' => 'O campo de salário é obrigatório.',
+            'salarioFuncionario.numeric' => 'O campo de salário deve ser numérico.',
+            'salarioFuncionario.min' => 'O campo de salário deve ser no mínimo 0.',
+
+            'emailFuncionario.required' => 'O campo de email é obrigatório.',
+            'emailFuncionario.email' => 'O campo de email deve ser um email válido.',
+            'emailFuncionario.max' => 'O campo de email não pode ter mais de 255 caracteres.',
+            'emailFuncionario.unique' => 'Este email já está em uso.',
+
+            'senhaFuncionario.required' => 'O campo de senha é obrigatório.',
+            'senhaFuncionario.string' => 'O campo de senha deve ser uma string.',
+            'senhaFuncionario.min' => 'O campo de senha deve ter no mínimo 6 caracteres.',
+            'senhaFuncionario.confirmed' => 'A confirmação da senha não coincide.',
+
+            'dddFuncionario.required' => 'O campo de DDD é obrigatório.',
+            'dddFuncionario.digits' => 'O campo de DDD deve ter 2 dígitos.',
+
+            'telefoneFuncionario.required' => 'O campo de telefone é obrigatório.',
+            'telefoneFuncionario.digits' => 'O campo de telefone deve ter 9 dígitos.',
+
+            'dataNascFuncionario.required' => 'O campo de data de nascimento é obrigatório.',
+            'dataNascFuncionario.date' => 'O campo de data de nascimento deve ser uma data válida.',
+
+            'descricaoFuncionario.required' => 'O campo de descrição é obrigatório.',
+            'descricaoFuncionario.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+
+            'cargoFuncionario.required' => 'O campo de cargo é obrigatório.',
+            'cargoFuncionario.in' => 'O campo de cargo deve ser "barbeiro" ou "gerente".',
+
+            'statusFuncionario.required' => 'O campo de status é obrigatório.',
+            'statusFuncionario.in' => 'O campo de status deve ser "ATIVO" ou "DESATIVO".',
+        ]);
+
 
 
 
