@@ -12,8 +12,8 @@
 
 
         /* ==========================================================================
-           #FONT
-           ========================================================================== */
+               #FONT
+               ========================================================================== */
         .font-robo {
             font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
         }
@@ -27,8 +27,8 @@
         }
 
         /* ==========================================================================
-           #GRID
-           ========================================================================== */
+               #GRID
+               ========================================================================== */
         .row {
             display: -webkit-box;
             display: -webkit-flex;
@@ -168,16 +168,16 @@
         }
 
         /* ==========================================================================
-           #BOX-SIZING
-           ========================================================================== */
+               #BOX-SIZING
+               ========================================================================== */
         /**
-         * More sensible default box-sizing:
-         * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
-         */
+             * More sensible default box-sizing:
+             * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
+             */
 
         /* ==========================================================================
-           #BACKGROUND
-           ========================================================================== */
+               #BACKGROUND
+               ========================================================================== */
         .bg-blue {
             background: #2c6ed5;
         }
@@ -211,8 +211,8 @@
         }
 
         /* ==========================================================================
-           #SPACING
-           ========================================================================== */
+               #SPACING
+               ========================================================================== */
         .p-t-100 {
             padding-top: 100px;
         }
@@ -266,8 +266,8 @@
         }
 
         /* ==========================================================================
-           #WRAPPER
-           ========================================================================== */
+               #WRAPPER
+               ========================================================================== */
         .wrapper {
             margin: 0 auto;
         }
@@ -289,8 +289,8 @@
         }
 
         /* ==========================================================================
-           #BUTTON
-           ========================================================================== */
+               #BUTTON
+               ========================================================================== */
         .btn {
             display: inline-block;
             line-height: 50px;
@@ -350,8 +350,8 @@
         }
 
         /* ==========================================================================
-           #DATE PICKER
-           ========================================================================== */
+               #DATE PICKER
+               ========================================================================== */
         td.active {
             background-color: #2c6ed5;
         }
@@ -402,8 +402,8 @@
         }
 
         /* ==========================================================================
-           #FORM
-           ========================================================================== */
+               #FORM
+               ========================================================================== */
         input {
             outline: none;
             margin: 0;
@@ -533,8 +533,8 @@
         }
 
         /* ==========================================================================
-           #SELECT2
-           ========================================================================== */
+               #SELECT2
+               ========================================================================== */
         .select--no-search .select2-search {
             display: none !important;
         }
@@ -626,8 +626,8 @@
         }
 
         /* ==========================================================================
-           #TITLE
-           ========================================================================== */
+               #TITLE
+               ========================================================================== */
         .title {
             font-size: 24px;
             text-transform: uppercase;
@@ -637,8 +637,8 @@
         }
 
         /* ==========================================================================
-           #CARD
-           ========================================================================== */
+               #CARD
+               ========================================================================== */
         .card {
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
@@ -856,24 +856,24 @@
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group-desc">
-                                    <input class="input--style-5" type="text" value="{{ $produto->nomeProduto }}"
-                                        required @error('nomeProduto') is-invalid @enderror id="nomeProduto"
-                                        name="nomeProduto" required maxlength="100">
-                                    @error('nomeProduto')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                    <input class="input--style-5" type="text"
+                                        value="{{ $produto->nomeProduto }}"id="nomeProduto" name="nomeProduto">
                                     <label class="label--desc">Nome</label>
+
+                                    @error('nomeProduto')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group-desc">
                                     <input class="input--style-5" type="text" value="{{ $produto->descricaoProduto }}"
-                                        @error('descricaoProduto') is-invalid @enderror id="descricaoProduto"
-                                        name="descricaoProduto" required maxlength="100">
-                                    @error('descricaoProduto')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        id="descricaoProduto" name="descricaoProduto">
                                     <label class="label--desc">Descrição</label>
+
+                                    @error('descricaoProduto')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -886,21 +886,21 @@
                             <div class="col-2" style="width: 200px;display: flex;">
                                 <div class="input-group-desc">
                                     <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ $produto->valorProduto }}" @error('valorProduto') is-invalid @enderror
-                                        id="valorProduto" name="valorProduto" required maxlength="100">
-                                    @error('valorProduto')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        value="{{ $produto->valorProduto }}" id="valorProduto" name="valorProduto">
                                     <label class="label--desc">Valor</label>
+
+                                    @error('estoqueProduto')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="input-group-desc" style="margin-left: 20%;">
                                     <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ $produto->estoqueProduto }}" @error('estoqueProduto') is-invalid @enderror
-                                        id="estoqueProduto" name="estoqueProduto" required maxlength="100">
-                                    @error('estoqueProduto')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        value="{{ $produto->estoqueProduto }}" id="estoqueProduto" name="estoqueProduto">
                                     <label class="label--desc">Quantidade no estoque</label>
+
+                                    @error('estoqueProduto')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -930,6 +930,10 @@
                     </label>
                 @endif
             </div>
+
+            @error('statusProduto')
+                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+            @enderror
         </div>
         <div>
             <button style="background: #ff6d24 !important" class="btn btn--radius-2 btn--red"

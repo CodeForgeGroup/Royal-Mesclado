@@ -12,8 +12,8 @@
 
 
         /* ==========================================================================
-       #FONT
-       ========================================================================== */
+           #FONT
+           ========================================================================== */
         .font-robo {
             font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
         }
@@ -27,8 +27,8 @@
         }
 
         /* ==========================================================================
-       #GRID
-       ========================================================================== */
+           #GRID
+           ========================================================================== */
         .row {
             display: -webkit-box;
             display: -webkit-flex;
@@ -168,16 +168,16 @@
         }
 
         /* ==========================================================================
-       #BOX-SIZING
-       ========================================================================== */
+           #BOX-SIZING
+           ========================================================================== */
         /**
-     * More sensible default box-sizing:
-     * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
-     */
+         * More sensible default box-sizing:
+         * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
+         */
 
         /* ==========================================================================
-       #BACKGROUND
-       ========================================================================== */
+           #BACKGROUND
+           ========================================================================== */
         .bg-blue {
             background: #2c6ed5;
         }
@@ -211,8 +211,8 @@
         }
 
         /* ==========================================================================
-       #SPACING
-       ========================================================================== */
+           #SPACING
+           ========================================================================== */
         .p-t-100 {
             padding-top: 100px;
         }
@@ -266,8 +266,8 @@
         }
 
         /* ==========================================================================
-       #WRAPPER
-       ========================================================================== */
+           #WRAPPER
+           ========================================================================== */
         .wrapper {
             margin: 0 auto;
         }
@@ -289,8 +289,8 @@
         }
 
         /* ==========================================================================
-       #BUTTON
-       ========================================================================== */
+           #BUTTON
+           ========================================================================== */
         .btn {
             display: inline-block;
             line-height: 50px;
@@ -350,8 +350,8 @@
         }
 
         /* ==========================================================================
-       #DATE PICKER
-       ========================================================================== */
+           #DATE PICKER
+           ========================================================================== */
         td.active {
             background-color: #2c6ed5;
         }
@@ -402,8 +402,8 @@
         }
 
         /* ==========================================================================
-       #FORM
-       ========================================================================== */
+           #FORM
+           ========================================================================== */
         input {
             outline: none;
             margin: 0;
@@ -533,8 +533,8 @@
         }
 
         /* ==========================================================================
-       #SELECT2
-       ========================================================================== */
+           #SELECT2
+           ========================================================================== */
         .select--no-search .select2-search {
             display: none !important;
         }
@@ -626,8 +626,8 @@
         }
 
         /* ==========================================================================
-       #TITLE
-       ========================================================================== */
+           #TITLE
+           ========================================================================== */
         .title {
             font-size: 24px;
             text-transform: uppercase;
@@ -637,8 +637,8 @@
         }
 
         /* ==========================================================================
-       #CARD
-       ========================================================================== */
+           #CARD
+           ========================================================================== */
         .card {
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
@@ -779,43 +779,43 @@
         }
 
         .radio-inputs {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 0.5rem;
-  background-color: #EEE;
-  box-sizing: border-box;
-  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
-  padding: 0.25rem;
-  width: 300px;
-  font-size: 14px;
-}
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 0.5rem;
+            background-color: #EEE;
+            box-sizing: border-box;
+            box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+            padding: 0.25rem;
+            width: 300px;
+            font-size: 14px;
+        }
 
-.radio-inputs .radio {
-  flex: 1 1 auto;
-  text-align: center;
-}
+        .radio-inputs .radio {
+            flex: 1 1 auto;
+            text-align: center;
+        }
 
-.radio-inputs .radio input {
-  display: none;
-}
+        .radio-inputs .radio input {
+            display: none;
+        }
 
-.radio-inputs .radio .name {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: none;
-  padding: .5rem 0;
-  color: rgba(51, 65, 85, 1);
-  transition: all .15s ease-in-out;
-}
+        .radio-inputs .radio .name {
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            border: none;
+            padding: .5rem 0;
+            color: rgba(51, 65, 85, 1);
+            transition: all .15s ease-in-out;
+        }
 
-.radio-inputs .radio input:checked + .name {
-  background-color: #fff;
-  font-weight: 600;
-}
+        .radio-inputs .radio input:checked+.name {
+            background-color: #fff;
+            font-weight: 600;
+        }
     </style>
 
     <div data-aos="fade-left" class="container" style="margin-top: 5%;">
@@ -824,7 +824,8 @@
             <a href="/dashboard/gerente/funcionarios">
                 <ion-icon style="font-size:20pt;margin-left:100%;" name="arrow-back-outline"></ion-icon>
             </a>
-            <h6 class="section-title bg-white text-center text-primary px-3">Edite as informações do horário selecionado</h6>
+            <h6 class="section-title bg-white text-center text-primary px-3">Edite as informações do horário selecionado
+            </h6>
             <h1 class="mb-5">Formulário</h1>
         </div>
     </div>
@@ -840,22 +841,25 @@
                         <div class="row">
                             <div class="items-center">
                                 <div class="input-group-desc">
-                                    <input class="input--style-5" type="text" id="horarios"
-                                        name="horarios" required maxlength="100">
+                                    <input class="input--style-5" type="text" id="horarios" name="horarios">
                                     <label class="label--desc">Horário</label>
+
+                                    @error('horarios')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-                <div class="d-flex justify-content-end">
-                    <button style="background: #ff6d24 !important; margin-right:5%;" class="btn btn--radius-2 btn--red"
-                        type="submit">Cadastro</button>
-                </div>
-            </form>
         </div>
+
+        <div class="d-flex justify-content-end">
+            <button style="background: #ff6d24 !important; margin-right:5%;" class="btn btn--radius-2 btn--red"
+                type="submit">Cadastro</button>
+        </div>
+        </form>
+    </div>
     </div>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
