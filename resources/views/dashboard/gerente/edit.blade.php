@@ -12,8 +12,8 @@
 
 
         /* ==========================================================================
-       #FONT
-       ========================================================================== */
+               #FONT
+               ========================================================================== */
         .font-robo {
             font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
         }
@@ -27,8 +27,8 @@
         }
 
         /* ==========================================================================
-       #GRID
-       ========================================================================== */
+               #GRID
+               ========================================================================== */
         .row {
             display: -webkit-box;
             display: -webkit-flex;
@@ -168,16 +168,16 @@
         }
 
         /* ==========================================================================
-       #BOX-SIZING
-       ========================================================================== */
+               #BOX-SIZING
+               ========================================================================== */
         /**
-     * More sensible default box-sizing:
-     * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
-     */
+             * More sensible default box-sizing:
+             * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
+             */
 
         /* ==========================================================================
-       #BACKGROUND
-       ========================================================================== */
+               #BACKGROUND
+               ========================================================================== */
         .bg-blue {
             background: #2c6ed5;
         }
@@ -211,8 +211,8 @@
         }
 
         /* ==========================================================================
-       #SPACING
-       ========================================================================== */
+               #SPACING
+               ========================================================================== */
         .p-t-100 {
             padding-top: 100px;
         }
@@ -266,8 +266,8 @@
         }
 
         /* ==========================================================================
-       #WRAPPER
-       ========================================================================== */
+               #WRAPPER
+               ========================================================================== */
         .wrapper {
             margin: 0 auto;
         }
@@ -289,8 +289,8 @@
         }
 
         /* ==========================================================================
-       #BUTTON
-       ========================================================================== */
+               #BUTTON
+               ========================================================================== */
         .btn {
             display: inline-block;
             line-height: 50px;
@@ -350,8 +350,8 @@
         }
 
         /* ==========================================================================
-       #DATE PICKER
-       ========================================================================== */
+               #DATE PICKER
+               ========================================================================== */
         td.active {
             background-color: #2c6ed5;
         }
@@ -402,8 +402,8 @@
         }
 
         /* ==========================================================================
-       #FORM
-       ========================================================================== */
+               #FORM
+               ========================================================================== */
         input {
             outline: none;
             margin: 0;
@@ -533,8 +533,8 @@
         }
 
         /* ==========================================================================
-       #SELECT2
-       ========================================================================== */
+               #SELECT2
+               ========================================================================== */
         .select--no-search .select2-search {
             display: none !important;
         }
@@ -626,8 +626,8 @@
         }
 
         /* ==========================================================================
-       #TITLE
-       ========================================================================== */
+               #TITLE
+               ========================================================================== */
         .title {
             font-size: 24px;
             text-transform: uppercase;
@@ -637,8 +637,8 @@
         }
 
         /* ==========================================================================
-       #CARD
-       ========================================================================== */
+               #CARD
+               ========================================================================== */
         .card {
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
@@ -779,43 +779,43 @@
         }
 
         .radio-inputs {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 0.5rem;
-  background-color: #EEE;
-  box-sizing: border-box;
-  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
-  padding: 0.25rem;
-  width: 300px;
-  font-size: 14px;
-}
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 0.5rem;
+            background-color: #EEE;
+            box-sizing: border-box;
+            box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+            padding: 0.25rem;
+            width: 300px;
+            font-size: 14px;
+        }
 
-.radio-inputs .radio {
-  flex: 1 1 auto;
-  text-align: center;
-}
+        .radio-inputs .radio {
+            flex: 1 1 auto;
+            text-align: center;
+        }
 
-.radio-inputs .radio input {
-  display: none;
-}
+        .radio-inputs .radio input {
+            display: none;
+        }
 
-.radio-inputs .radio .name {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: none;
-  padding: .5rem 0;
-  color: rgba(51, 65, 85, 1);
-  transition: all .15s ease-in-out;
-}
+        .radio-inputs .radio .name {
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            border: none;
+            padding: .5rem 0;
+            color: rgba(51, 65, 85, 1);
+            transition: all .15s ease-in-out;
+        }
 
-.radio-inputs .radio input:checked + .name {
-  background-color: #fff;
-  font-weight: 600;
-}
+        .radio-inputs .radio input:checked+.name {
+            background-color: #fff;
+            font-weight: 600;
+        }
     </style>
 
     <div data-aos="fade-left" class="container" style="margin-top: 5%;">
@@ -832,14 +832,15 @@
 
     <div data-aos="fade-left" class="card card-5">
         <div class="card-body">
-            <form method="POST" action="{{ route('gerente.update', ['id' => $gerente->id]) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('gerente.update', ['id' => $gerente->id]) }}"
+                enctype="multipart/form-data">
 
                 @csrf
                 @method('PUT')
 
                 <div class="wrapper">
                     <button type="button" class="no-image" id="img-result">Upload Image</button>
-                    <input type="file" name="fotoFuncionario" id="image_file" style="display:none;" required>
+                    <input type="file" name="fotoFuncionario" id="image_file" style="display:none;">
                 </div>
 
                 <div class="upload-result">
@@ -854,24 +855,24 @@
                             <div class="col-2">
                                 <div class="input-group-desc">
                                     <input class="input--style-5" type="text" value="{{ $gerente->nomeFuncionario }}"
-                                        required @error('nomeFuncionario') is-invalid @enderror id="nomeFuncionario"
-                                        name="nomeFuncionario" required maxlength="100">
-                                    @error('nomeFuncionario')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        id="nomeFuncionario" name="nomeFuncionario" maxlength="100">
                                     <label class="label--desc">Nome</label>
+
+                                    @error('nomeFuncionario')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group-desc">
                                     <input class="input--style-5" type="text"
-                                        value="{{ $gerente->sobrenomeFuncionario }}"
-                                        @error('sobrenomeFuncionario') is-invalid @enderror id="sobrenomeFuncionario"
-                                        name="sobrenomeFuncionario" required maxlength="100">
-                                    @error('sobrenomeFuncionario')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        value="{{ $gerente->sobrenomeFuncionario }}"id="sobrenomeFuncionario"
+                                        name="sobrenomeFuncionario" maxlength="100">
                                     <label class="label--desc">Sobrenome</label>
+
+                                    @error('sobrenomeFuncionario')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -884,72 +885,86 @@
                             <div class="col-2" style="width: 200px;display: flex;">
                                 <div class="input-group-desc">
                                     <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ $gerente->especialidadeFuncionario }}"
-                                        @error('especialidadeFuncionario') is-invalid @enderror
-                                        id="especialidadeFuncionario" name="especialidadeFuncionario" required
-                                        maxlength="100">
-                                    @error('especialidadeFuncionario')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        value="{{ $gerente->especialidadeFuncionario }}" id="especialidadeFuncionario"
+                                        name="especialidadeFuncionario" maxlength="100">
                                     <label class="label--desc">Especialidade (Barbeiro)</label>
-                                </div>
-                                <div class="input-group-desc" style="margin-left: 20%;">
-                                    <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ $gerente->inicioExpedienteFuncionario }}"
-                                        @error('inicioExpedienteFuncionario') is-invalid @enderror
-                                        id="inicioExpedienteFuncionario" name="inicioExpedienteFuncionario" required
-                                        maxlength="100">
-                                    @error('inicioExpedienteFuncionario')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+
+                                    @error('especialidadeFuncionario')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
-                                    <label class="label--desc">Inicio Expediente</label>
                                 </div>
-                            </div>
-                            <div class="col-2" style="width: 670px;display: flex;">
-                                <div class="input-group-desc">
-                                    <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ $gerente->fimExpedienteFuncionario }}"
-                                        @error('fimExpedienteFuncionario') is-invalid @enderror id="fimExpedienteFuncionario"
-                                        name="fimExpedienteFuncionario" required maxlength="100">
-                                    @error('fimExpedienteFuncionario')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
-                                    <label class="label--desc">Fim Expediente</label>
-                                </div>
+
                                 <div class="input-group-desc" style="margin-left: 7%;">
                                     <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ number_format($gerente->salarioFuncionario, 2, ',', '.') }}"
-                                        @error('salarioFuncionario') is-invalid @enderror id="salarioFuncionario"
-                                        name="salarioFuncionario" required maxlength="100">
-                                    @error('salarioFuncionario')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                        value="{{ $gerente->salarioFuncionario }}"
+                                        id="salarioFuncionario" name="salarioFuncionario">
                                     <label class="label--desc">Salario</label>
+
+                                    @error('salarioFuncionario')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+
+                <div class="form-row m-b-55">
+                    <div class="name">Expediente</div>
+                    <div class="value">
+                        <div class="row row-space">
+                            <div class="col-2" style="width: 200px;display: flex;">
+                                <div class="input-group-desc">
+                                    <input class="input--style-5" style="width:300px;" type="text"
+                                        value="{{ $gerente->inicioExpedienteFuncionario }}"
+                                        id="inicioExpedienteFuncionario" name="inicioExpedienteFuncionario" maxlength="100">
+                                    <label class="label--desc">Inicio Expediente</label>
+
+                                    @error('inicioExpedienteFuncionario')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="input-group-desc" style="margin-left: 7%;">
+                                    <input class="input--style-5" style="width:300px;" type="text"
+                                        value="{{ $gerente->fimExpedienteFuncionario }}" id="fimExpedienteFuncionario"
+                                        name="fimExpedienteFuncionario" maxlength="100">
+                                    <label class="label--desc">Fim Expediente</label>
+
+                                    @error('fimExpedienteFuncionario')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="form-row">
                     <div class="name">Login</div>
                     <div class="col-2" style="width: 250px;display: flex;">
                         <div class="input-group-desc">
                             <input class="input--style-5" style="width:640px;" type="text"
-                                value="{{ $gerente->emailFuncionario }}" @error('emailFuncionario') is-invalid @enderror
-                                id="emailFuncionario" name="emailFuncionario" required maxlength="100">
-                            @error('emailFuncionario')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                value="{{ $gerente->emailFuncionario }}" id="emailFuncionario"
+                                name="emailFuncionario" maxlength="100">
                             <label class="label--desc">Email</label>
+
+                            @error('emailFuncionario')
+                            <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                        @enderror
                         </div>
                         <div class="input-group-desc" style="margin-left: 20%;">
                             <input class="input--style-5" style="width:500px;" type="password"
-                                value="{{ $senha->senha }}" @error('senhaFuncionario') is-invalid @enderror
-                                id="senhaFuncionario" name="senhaFuncionario" required maxlength="100">
-                            @error('senhaFuncionario')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                value="{{ $senha->senha }}" id="senhaFuncionario" name="senhaFuncionario"
+                                maxlength="100">
                             <label class="label--desc">Senha</label>
+
+                            @error('senhaFuncionario')
+                            <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                        @enderror
                         </div>
                     </div>
                 </div>
@@ -958,67 +973,104 @@
                     <div class="col-2" style="width: 100px;display: flex;">
                         <div class="input-group-desc">
                             <input class="input--style-5" style="width:100px;" type="text"
-                            @php
-                                $testeDD = '(' . substr($gerente->numeroFuncionario, 0, 2) . ')'
-                            @endphp
-                                value="{{ $testeDD }}"
-                                @error('dddFuncionario') is-invalid @enderror id="dddFuncionario"
-                                name="dddFuncionario" required maxlength="100">
-                            @error('dddFuncionario')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                @php
+$testeDD = '(' . substr($gerente->numeroFuncionario, 0, 2) . ')' @endphp
+                                value="{{ $testeDD }}" id="dddFuncionario" name="dddFuncionario" maxlength="100">
                             <label class="label--desc">DDD</label>
+
+                            @error('dddFuncionario')
+                            <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                        @enderror
                         </div>
                         <div class="input-group-desc" style="margin-left: 10%;">
                             <input class="input--style-5" style="width:300px;" type="text"
-                                value="{{ substr($gerente->numeroFuncionario, 2, 5) . '-' . substr($gerente->numeroFuncionario, 7) }}"
-                                @error('numeroFuncionario') is-invalid @enderror id="numeroFuncionario"
-                                name="numeroFuncionario" required maxlength="100">
-                            @error('numeroFuncionario')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                value="{{ substr($gerente->numeroFuncionario, 2, 5) . '-' . substr($gerente->numeroFuncionario, 7) }}"id="numeroFuncionario"
+                                name="numeroFuncionario" maxlength="100">
                             <label class="label--desc">Número Telefone</label>
+
+                            @error('numeroFuncionario')
+                            <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                        @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-2" style="width: 300px;display: flex;">
+                        <div class="input-group-desc" style="margin-left: 590px;">
+                            <textarea style="width:500px;height:100px;border:0px;resize:none;" class="input--style-5" name="descricaoFuncionario"
+                                id="descricaoFuncionario" cols="30" rows="10">{{ $gerente->descricaoFuncionario }}</textarea>
+                            <label class="label--desc">Descrição</label>
+                            @error('descricaoFuncionario')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row m-b-55">
+                    <div class="name">Data</div>
+                    <div class="col-2" style="width: 100px;display: flex;">
+                        <div class="input-group-desc">
+                            <input class="input--style-5" style="width:150px;" type="date" name="dataNascFuncionario"
+                                value='{{ $gerente->dataNascFuncionario }}'>
+                            <label class="label--desc"></label>
+
+                            @error('dataNascFuncionario')
+                            <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                        @enderror
                         </div>
                     </div>
                 </div>
 
                 <div class="form-row">
-                <div class="name">Cargo</div>
-                <div class="value">
-                    <div class="input-group">
-                        <div class="rs-select2 js-select-simple select--no-search" style="margin-top: 1%;">
-                            <div class="radio-inputs">
-                                @if ($gerente->cargoFuncionario == 'gerente')
+                    <div class="name">Cargo</div>
+                    <div class="value">
+                        <div class="input-group">
+                            <div class="rs-select2 js-select-simple select--no-search" style="margin-top: 1%;">
+                                <div class="radio-inputs">
+                                    @if ($gerente->cargoFuncionario == 'gerente')
+                                        <label class="radio">
+                                            <input type="radio" name="cargoFuncionario" checked=""
+                                                value="gerente">
+                                            <span class="name">Gerente</span>
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" name="cargoFuncionario" value="barbeiro">
+                                            <span class="name">Barbeiro</span>
+                                        </label>
 
-                                <label class="radio">
-                                    <input type="radio" name="cargoFuncionario" checked="" value="gerente">
-                                    <span class="name">Gerente</span>
-                                  </label>
-                                <label class="radio">
-                                  <input type="radio" name="cargoFuncionario" value="barbeiro">
-                                  <span class="name">Barbeiro</span>
-                                </label>
-                                @else
-                                <label class="radio">
-                                  <input type="radio" name="cargoFuncionario" checked="" value="barbeiro">
-                                  <span class="name">Barbeiro</span>
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="cargoFuncionario" value="gerente">
-                                    <span class="name">Gerente</span>
-                                  </label>
-                                @endif
 
-                              </div><span style="display: none" class="select2 select2-container select2-container--default" dir="ltr" style="width: 110px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-subject-of-container"><span class="select2-selection__rendered" id="select2-subject-of-container" title="Choose option">Choose option</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                            <div class="select-dropdown"></div>
+                                    @else
+                                        <label class="radio">
+                                            <input type="radio" name="cargoFuncionario" checked=""
+                                                value="barbeiro">
+                                            <span class="name">Barbeiro</span>
+                                        </label>
+                                        <label class="radio">
+                                            <input type="radio" name="cargoFuncionario" value="gerente">
+                                            <span class="name">Gerente</span>
+                                        </label>
+
+                                    @endif
+
+                                </div><span style="display: none"
+                                    class="select2 select2-container select2-container--default" dir="ltr"
+                                    style="width: 110px;"><span class="selection"><span
+                                            class="select2-selection select2-selection--single" role="combobox"
+                                            aria-haspopup="true" aria-expanded="false" tabindex="0"
+                                            aria-labelledby="select2-subject-of-container"><span
+                                                class="select2-selection__rendered" id="select2-subject-of-container"
+                                                title="Choose option">Choose option</span><span
+                                                class="select2-selection__arrow" role="presentation"><b
+                                                    role="presentation"></b></span></span></span><span
+                                        class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                <div class="select-dropdown"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
                 <div class="form-row p-t-20">
                     <label class="label label--block">Status</label>
                     <div class="p-t-15">
-                        @if ($gerente->statusFuncionario == 'ativo')
+                        @if ($gerente->statusFuncionario == 'ativo' || $gerente->statusFuncionario == 'ATIVO')
                             <label class="radio-container m-r-55">ATIVO
                                 <input type="radio" checked="checked" name="statusFuncionario" value="ativo">
                                 <span class="checkmark" style="background: #ff6d24 !important"></span>
