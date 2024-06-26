@@ -841,13 +841,12 @@
                         <div class="row">
                             <div class="items-center">
                                 <div class="input-group-desc">
-                                    <input class="input--style-5" type="text" value="{{ $horario->horarios }}"
-                                        required @error('horarios') is-invalid @enderror id="horarios"
-                                        name="horarios" required maxlength="100">
-                                    @error('horarios')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                    <input class="input--style-5" type="text" value="{{ $horario->horarios }}" id="horarios"
+                                        name="horarios">
                                     <label class="label--desc">Horário</label>
+                                    @error('horarios')
+                                    <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                @enderror
                                 </div>
                             </div>
                         </div>

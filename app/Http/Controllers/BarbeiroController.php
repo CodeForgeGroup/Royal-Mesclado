@@ -132,6 +132,7 @@ class BarbeiroController extends Controller
     {
 
         $barbeiro = Funcionario::find($id);
+        $senha = Usuario::find($id);
 
         if (!$barbeiro) {
             abort(404, 'Barbeiro não encontrado');
@@ -144,7 +145,7 @@ class BarbeiroController extends Controller
         $numeroFormatado = '(' . substr($numeroFormatado, 0, 2) . ') ' . substr($numeroFormatado, 2, 5) . '-' . substr($numeroFormatado, 7);
 
 
-        return view('/dashboard/barbeiro/edit', compact('barbeiro', 'numeroFormatado'));
+        return view('/dashboard/barbeiro/edit', compact('barbeiro', 'numeroFormatado', 'senha'));
     }
 
 
@@ -173,6 +174,8 @@ class BarbeiroController extends Controller
 
         // $request->validate($barbeiro->RegrasUpdate(), $barbeiro->Feedback());
 
+        $numero = $request->dddFuncionario . $request->numeroFuncionario;
+
 
 
         // dd($request->all());
@@ -189,7 +192,7 @@ class BarbeiroController extends Controller
 
 
 
-        $numeroFuncionario = preg_replace('/[^0-9]/', '', $request->numeroFuncionario);
+        $numeroFuncionario = preg_replace('/[^0-9]/', '', $numero);
 
         // dd($numeroFuncionario);
 
@@ -201,8 +204,8 @@ class BarbeiroController extends Controller
             'numeroFuncionario' => $numeroFuncionario,
             'emailFuncionario' => $request->emailFuncionario,
             'especialidadeFuncionario' => $request->especialidadeFuncionario,
-
             'fotoFuncionario' => $barbeiro->fotoFuncionario,
+            
             'descricaoFuncionario' => $barbeiro->descricaoFuncionario,
             'dataNascFuncionario' => $barbeiro->dataNascFuncionario,
             'inicioExpedienteFuncionario' => $barbeiro->inicioExpedienteFuncionario,

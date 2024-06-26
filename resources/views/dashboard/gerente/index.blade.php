@@ -151,10 +151,10 @@
                                 <div class="d-flex flex-column h-100">
                                     <p class="mb-1 pt-2 text-bold">Seja Bem Vindo a sua área de trabalho,
                                         {{ session('nome') }}!</p>
-                                    <h5 class="text-white font-weight-bolder">Veja seus compromissos</h5>
-                                    <p class="mb-5">Clique em saiba mais e vá ver seus tabalhos de hoje!</p>
+                                    <h5 class="text-white font-weight-bolder">Veja os agendamentos</h5>
+                                    <p class="mb-5">Clique em saiba mais e vá ver os trabalhos de hoje!</p>
                                     <a class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto"
-                                        href="{{ url('dashboard/barbeiro/compromisso') }}">
+                                        href="{{ route('gerente.agendamento') }}">
                                         Saiba mais
                                         <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                                     </a>
@@ -180,7 +180,7 @@
                             <p class="text-white">Edite seu perfil e deixe-o de uma forma que te agrade com as suas
                                 caracteristicas!</p>
                             <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto"
-                                href="{{ url('dashboard/barbeiro/perfil') }}">
+                                href="{{ route('gerente.perfil') }}">
                                 Edite
                                 <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
                             </a>
@@ -198,21 +198,7 @@
                             <div class="col-lg-6 col-7">
                                 <h6 class="text-white">Ultimas vendas!</h6>
                             </div>
-                            <div class="col-lg-6 col-5 my-auto text-end">
-                                <div class="dropdown float-lg-end pe-4">
-                                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class="fa fa-ellipsis-v text-secondary"></i>
-                                    </a>
-                                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another
-                                                action</a></li>
-                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else
-                                                here</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">

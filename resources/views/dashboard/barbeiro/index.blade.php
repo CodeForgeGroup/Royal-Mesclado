@@ -10,6 +10,14 @@
 
 
 
+<style>
+
+.topo{
+        color: #ff6d24;
+    }
+
+</style>
+
 
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
@@ -56,7 +64,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Clientes Mensais</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Clientes Mensais</p>
                                     <h5 class="text-white font-weight-bolder mb-0">
                                             {{ $clientesMensais }}
                                     </h5>
@@ -77,7 +85,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Cortes Feitos</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Cortes Feitos</p>
                                     <h5 class=" text-white font-weight-bolder mb-0">
                                         {{ $qntCortes }}
                                     </h5>
@@ -98,7 +106,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Salário</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Salário</p>
                                     <h5 class="text-white font-weight-bolder mb-0">
                                         R$ {{ $salario }}
                                     </h5>
@@ -119,7 +127,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Lucro mensal</p>
+                                    <p class="text-sm mb-0 text-capitalize font-weight-bold topo">Lucro mensal</p>
                                     <h5 class="text-white font-weight-bolder mb-0">
                                         R$ {{ $lucro }}
                                     </h5>

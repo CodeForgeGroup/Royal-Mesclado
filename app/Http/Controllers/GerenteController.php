@@ -253,6 +253,8 @@ class GerenteController extends Controller
 
 
         $numeroFormatado = $request->dddFuncionario . $request->numeroFuncionario;
+        $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
+
 
         // $testeDDD = $request->dddFuncionario;
         // $testeNumero = $request->numeroFuncionario;
@@ -297,7 +299,6 @@ class GerenteController extends Controller
         $imagem_url = $imagem->store('imagem', 'public');
 
 
-        $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
 
         $gerente->update([
             'fotoFuncionario' => $imagem_url,
@@ -337,23 +338,7 @@ class GerenteController extends Controller
     public function updateFuncionario(Request $request, $id)
     {
 
-
-
         $gerente = Funcionario::find($id);
-
-
-        $numeroFormatado = $request->dddFuncionario . $request->numeroFuncionario;
-
-        // $testeDDD = $request->dddFuncionario;
-        // $testeNumero = $request->numeroFuncionario;
-        $numero_formatado = str_replace(array('R$', '.'), '', $request->salarioFuncionario);
-
-        // Substituir a vírgula decimal por um ponto
-        $salarioFuncionario = str_replace(',', '.', $numero_formatado);
-
-
-        // dd($request->salarioFuncionario );
-
 
         // Verifica se o funcionário existe
         if ($gerente === null) {
@@ -366,6 +351,90 @@ class GerenteController extends Controller
         if ($usuario === null) {
             return response()->json(['error' => 'Impossível realizar a operação. O usuário não existe'], 404);
         }
+
+
+        $request->merge([
+            'telefoneFuncionario' => str_replace('-', '', $request->telefoneFuncionario),
+            'salarioFuncionario' => str_replace(['R$', '.', ','], '', $request->salarioFuncionario),
+            'dddFuncionario' => str_replace(['(', ')'], '', $request->dddFuncionario),
+        ]);
+
+
+
+        $request->validate([
+            'nomeFuncionario' => 'required|string|max:255',
+            'sobrenomeFuncionario' => 'required|string|max:255',
+            'especialidadeFuncionario' => 'required|string|max:255',
+            'inicioExpedienteFuncionario' => 'required|date_format:H:i:s',
+            'fimExpedienteFuncionario' => 'required|date_format:H:i:s|after:inicioExpedienteFuncionario',
+            'salarioFuncionario' => 'required|numeric|min:0',
+            'emailFuncionario' => 'required|email|max:255|unique:usuarios,email,'.$id,
+            'senhaFuncionario' => 'required|string|min:6',
+            'dddFuncionario' => 'required|digits:2',
+            'telefoneFuncionario' => 'required|digits:9',
+            'dataNascFuncionario' => 'required|date',
+            'descricaoFuncionario' => 'required|max:255',
+            // 'cargoFuncionario' => 'required|string|in:barbeiro,gerente',
+            // 'statusFuncionario' => 'required|string|in:ATIVO,DESATIVO',
+        ], [
+
+            'nomeFuncionario.required' => 'O campo Nome é obrigatório.',
+            'nomeFuncionario.string' => 'O campo Nome deve ser uma string.',
+            'nomeFuncionario.max' => 'O campo Nome não pode ter mais de 255 caracteres.',
+
+            'sobrenomeFuncionario.required' => 'O campo Sobrenome é obrigatório.',
+            'sobrenomeFuncionario.string' => 'O campo Sobrenome deve ser uma string.',
+            'sobrenomeFuncionario.max' => 'O campo Sobrenome não pode ter mais de 255 caracteres.',
+
+            'especialidadeFuncionario.required' => 'O campo de especialidade é obrigatório.',
+            'especialidadeFuncionario.string' => 'O campo de especialidade deve ser uma string.',
+            'especialidadeFuncionario.max' => 'O campo de especialidade não pode ter mais de 255 caracteres.',
+
+            'inicioExpedienteFuncionario.required' => 'O campo de início de expediente é obrigatório.',
+            'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto".',
+
+            'fimExpedienteFuncionario.required' => 'O campo de fim de expediente é obrigatório.',
+            'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto".',
+            'fimExpedienteFuncionario.after' => 'O campo de fim de expediente deve ser uma hora após o início do expediente.',
+
+            'salarioFuncionario.required' => 'O campo de salário é obrigatório.',
+            'salarioFuncionario.numeric' => 'O campo de salário deve ser numérico.',
+            'salarioFuncionario.min' => 'O campo de salário deve ser no mínimo 0.',
+
+            'emailFuncionario.required' => 'O campo de email é obrigatório.',
+            'emailFuncionario.email' => 'O campo de email deve ser um email válido.',
+            'emailFuncionario.max' => 'O campo de email não pode ter mais de 255 caracteres.',
+            'emailFuncionario.unique' => 'Este email já está em uso.',
+
+            'senhaFuncionario.required' => 'O campo de senha é obrigatório.',
+            'senhaFuncionario.string' => 'O campo de senha deve ser uma string.',
+            'senhaFuncionario.min' => 'O campo de senha deve ter no mínimo 6 caracteres.',
+
+            'dddFuncionario.required' => 'O campo de DDD é obrigatório.',
+            'dddFuncionario.digits' => 'O campo de DDD deve ter 2 dígitos.',
+
+            'telefoneFuncionario.required' => 'O campo de telefone é obrigatório.',
+            'telefoneFuncionario.digits' => 'O campo de telefone deve ter 9 dígitos.',
+
+            'dataNascFuncionario.required' => 'O campo de data de nascimento é obrigatório.',
+            'dataNascFuncionario.date' => 'O campo de data de nascimento deve ser uma data válida.',
+
+            'descricaoFuncionario.required' => 'O campo de descrição é obrigatório.',
+            'descricaoFuncionario.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+
+        ]);
+
+
+        $numeroFormatado = $request->dddFuncionario . $request->telefoneFuncionario;
+
+        // $testeDDD = $request->dddFuncionario;
+        // $testeNumero = $request->numeroFuncionario;
+
+
+
+        // dd($request->salarioFuncionario );
+
+
 
 
         if ($request->hasFile('fotoFuncionario') && $request->file('fotoFuncionario')->isValid()) {
@@ -399,7 +468,7 @@ class GerenteController extends Controller
             'fimExpedienteFuncionario' => $request->fimExpedienteFuncionario,
             'cargoFuncionario' => $request->cargoFuncionario,
             'descricaoFuncionario' => $request->descricaoFuncionario,
-            'salarioFuncionario' => $salarioFuncionario,
+            'salarioFuncionario' => $request->salarioFuncionario,
             'statusFuncionario' => $request->statusFuncionario
         ]);
 
@@ -522,7 +591,7 @@ class GerenteController extends Controller
             ->take(10)
             ->get();
 
-        $produtos = Produtos::where('statusProduto', 'ativo')->get();
+        $produtos = Produtos::where('statusProduto', 'ativo')->where('estoqueProduto', '>', 0)->get();
 
 
 
@@ -534,8 +603,8 @@ class GerenteController extends Controller
         ->first();
 
         if($funcionarioDoMes){
-            $funcionarioMes = Funcionario::find($funcionarioDoMes->idFuncionario);
-            $funcionarioMes = $funcionarioMes->nomeFuncionario;
+            $funcionarioDoMes = Funcionario::find($funcionarioDoMes->idFuncionario);
+            $funcionarioMes = $funcionarioDoMes->nomeFuncionario;
         }else{
             $funcionarioDoMes == null;
             $funcionarioMes = $funcionarioDoMes;
@@ -549,7 +618,7 @@ class GerenteController extends Controller
         if($funcionarioMes){
         $faturamentoF = Vendas::whereMonth('created_at', $mesAtual)
         ->whereYear('created_at', $anoAtual)
-        ->where('idFuncionario', $funcionarioMes->id)
+        ->where('idFuncionario', $funcionarioDoMes->id)
         ->sum('valorVenda');
         }else{
             $faturamentoF = '0';
@@ -581,6 +650,37 @@ class GerenteController extends Controller
         // Cria uma nova instância de Vendas
         //  $testeNome = $request->nomeVenda;
 
+
+
+        $request->validate([
+            // 'fotoServico' => 'required|max:255',
+            'nomeVenda' => 'required',
+            'valorVenda' => 'required|numeric|min:1',
+            'qntVenda' => 'required|numeric|min:1',
+            'descricaoVenda' => 'required|string|max:200',
+        ], [
+            // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            'nomeVenda.required' => 'O campo nome é obrigatório.',
+
+            'valorVenda.required' => 'O campo de valor deve ser preenchido.',
+            'valorVenda.numeric' => 'O campo de valor deve ser numérico.',
+            'valorVenda.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'qntVenda.required' => 'O campo de valor deve ser preenchido.',
+            'qntVenda.numeric' => 'O campo de quantidade deve ser numérico.',
+
+            'descricaoVenda.required' => 'O campo descrição deve ser preenchido.',
+            'descricaoVenda.max' => 'O campo descrição não pode ter mais de 200 caracteres.',
+
+        ]);
+
+
+
+
+
+
+
         $valorVenda = $request->valorVenda * $request->qntVenda;
 
         $venda = new vendas;
@@ -594,6 +694,26 @@ class GerenteController extends Controller
         // Cria o registro de venda no banco de dados
         // dd($venda->valorVenda);
         $venda->save();
+
+        $produto = Produtos::where('nomeProduto', $request->nomeVenda)->first();
+
+        // dd($produto);
+
+        $estoque = $produto->estoqueProduto - $request->qntVenda;
+
+       if($estoque > 0){
+
+        $produto->update([
+            'estoqueProduto' => $estoque,
+        ]);
+       } else{
+
+        $produto->update([
+            'estoqueProduto' => $estoque,
+            'statusProduto' => 'inativo',
+        ]);
+       }
+
 
 
         // 2. Redirecionamento com mensagem flash (adequado para aplicações web)
@@ -610,9 +730,43 @@ class GerenteController extends Controller
 
     }
 
+
     public function storeProduto(Request $request)
     {
-        $imagem = $request->file('fotoServico');
+
+
+        $request->validate([
+            'fotoProduto' => 'required|max:255',
+            'nomeProduto' => 'required|string|max:150',
+            'descricaoProduto' => 'required|string|max:255',
+            'valorProduto' => 'required|numeric|min:1',
+            'estoqueProduto' => 'required|numeric|min:1',
+            'statusProduto' => 'required',
+        ], [
+            // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            'fotoProduto.required' => 'O campo de foto é obrigatório.',
+
+            'nomeProduto.required' => 'O campo de nome é obrigatório.',
+            'nomeProduto.string' => 'O campo de nome deve ser uma string.',
+            'nomeProduto.max' => 'O campo de nome não pode ter mais de 150 caracteres.',
+
+            'descricaoProduto.required' => 'O campo de descrição deve ser preenchido.',
+            'descricaoProduto.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+
+            'valorProduto.required' => 'O campo de valor deve ser preenchido.',
+            'valorProduto.numeric' => 'O campo de valor deve ser numérico.',
+            'valorProduto.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'estoqueProduto.required' => 'O campo de quantidade deve ser preenchido.',
+            'estoqueProduto.numeric' => 'O campo de quantidade deve ser numérico',
+            'estoqueProduto.min' => 'O campo de quantidade deve ser maior do que o preenchido',
+
+            'statusProduto.required' => 'O campo de valor deve ser preenchido.',
+
+        ]);
+
+        $imagem = $request->file('fotoProduto');
 
         if ($imagem == null) {
             $imagem_url = 'SEM IMAGEM';
@@ -630,6 +784,12 @@ class GerenteController extends Controller
         $produto->save();
 
         return redirect()->route('gerente.vendas');
+    }
+
+    public function produtoEsgotado(){
+        $produtos = Produtos::where('statusProduto', 'inativo')->where('estoqueProduto', '<=', 0)->get();
+        return view('dashboard.gerente.esgotado', compact('produtos'));
+
     }
 
 
@@ -656,6 +816,43 @@ class GerenteController extends Controller
 
 
         // dd($request->file('fotoProduto'));
+
+
+        $request->validate([
+            // 'fotoProduto' => 'required|max:255',
+            'nomeProduto' => 'required|string|max:150',
+            'descricaoProduto' => 'required|string|max:255',
+            'valorProduto' => 'required|numeric|min:1',
+            'estoqueProduto' => 'required|numeric|min:1',
+            'statusProduto' => 'required',
+        ], [
+            // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            // 'fotoProduto.required' => 'O campo de foto é obrigatório.',
+
+            'nomeProduto.required' => 'O campo de nome é obrigatório.',
+            'nomeProduto.string' => 'O campo de nome deve ser uma string.',
+            'nomeProduto.max' => 'O campo de nome não pode ter mais de 150 caracteres.',
+
+            'descricaoProduto.required' => 'O campo de descrição deve ser preenchido.',
+            'descricaoProduto.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+
+            'valorProduto.required' => 'O campo de valor deve ser preenchido.',
+            'valorProduto.numeric' => 'O campo de valor deve ser numérico.',
+            'valorProduto.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'estoqueProduto.required' => 'O campo de quantidade deve ser preenchido.',
+            'estoqueProduto.numeric' => 'O campo de quantidade deve ser numérico',
+            'estoqueProduto.min' => 'O campo de quantidade deve ser maior do que o preenchido',
+
+            'statusProduto.required' => 'O campo de valor deve ser preenchido.',
+
+        ]);
+
+
+        $imagem_url = $produto->fotoServico; // Manter a URL da imagem antiga se não houver nova imagem
+
+
 
         if($request->file('fotoProduto') == null)
         {
@@ -754,6 +951,15 @@ class GerenteController extends Controller
 
     public function storeHorario(Request $request)
     {
+
+        $request->validate([
+            'horarios' => 'required|date_format:H:i'
+        ],[
+            'horarios.required' => 'O campo de horário precisa ser preenchido!',
+            'horarios.date_format' => 'O horário precisa estar no formato "hora:minuto"'
+        ]);
+
+
         $horario = new Horario();
         $horario->horarios = $request->input('horarios');
         $horario->save();
@@ -764,6 +970,13 @@ class GerenteController extends Controller
     public function horarioUpdate(Request $request, $id)
     {
         $horario = Horario::find($id);
+
+        $request->validate([
+            'horarios' => 'required|date_format:H:i'
+        ],[
+            'horarios.required' => 'O campo de horário precisa ser preenchido!',
+            'horarios.date_format' => 'O horário precisa estar no formato "hora:minuto"'
+        ]);
 
         $horario->update([
             'horarios' => $request->horarios,
@@ -780,6 +993,11 @@ class GerenteController extends Controller
         $funcionario = Funcionario::findOrFail($id);
 
         $senha = Usuario::where('tipo_usuario_id', $id)->first();
+
+
+
+
+
 
         return view('dashboard.gerente.editFunc', compact('funcionario','senha'));
     }
@@ -822,6 +1040,42 @@ class GerenteController extends Controller
     if ($servico === null) {
         return response()->json(['error' => 'Impossível realizar a operação. O serviço não existe'], 404);
     }
+
+
+
+
+
+    $request->validate([
+        // 'fotoServico' => 'required|max:255',
+        'nomeServico' => 'required|string|max:150',
+        'descricaoServico' => 'required|string|max:255',
+        'valorServico' => 'required|numeric|min:1',
+        'duracaoServico' => 'required|date_format:H:i:s',
+        'statusServico' => 'required',
+    ], [
+        // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+        'nomeServico.required' => 'O campo nome é obrigatório.',
+        'nomeServico.string' => 'O campo nome deve ser uma string.',
+        'nomeServico.max' => 'O campo nome não pode ter mais de 150 caracteres.',
+
+        'descricaoServico.required' => 'O campo descrição deve ser preenchido.',
+        'descricaoServico.max' => 'O campo descrição não pode ter mais de 255 caracteres.',
+
+        'valorServico.required' => 'O campo de valor deve ser preenchido.',
+        'valorServico.numeric' => 'O campo de valor deve ser numérico.',
+        'valorServico.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+        'duracaoServico.required' => 'O campo de valor deve ser preenchido.',
+        'duracaoServico.date_format' => 'O campo de duracao precisa estar no formato "hora:minuto:segundo"',
+
+        'statusServico.required' => 'O campo de valor deve ser preenchido.',
+
+    ]);
+
+
+
+
 
     $imagem_url = $servico->fotoServico; // Manter a URL da imagem antiga se não houver nova imagem
 
@@ -904,6 +1158,37 @@ public function updateStatusServicoAtivar(Request $request, $id)
 
      public function storeServico(Request $request)
      {
+
+
+        $request->validate([
+            'fotoServico' => 'required|max:255',
+            'nomeServico' => 'required|string|max:150',
+            'descricaoServico' => 'required|string|max:255',
+            'valorServico' => 'required|numeric|min:1',
+            'duracaoServico' => 'required|date_format:H:i:s',
+            'statusServico' => 'required',
+        ], [
+            'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            'nomeServico.required' => 'O campo nome é obrigatório.',
+            'nomeServico.string' => 'O campo nome deve ser uma string.',
+            'nomeServico.max' => 'O campo nome não pode ter mais de 150 caracteres.',
+
+            'descricaoServico.required' => 'O campo descrição deve ser preenchido.',
+            'descricaoServico.max' => 'O campo descrição não pode ter mais de 255 caracteres.',
+
+            'valorServico.required' => 'O campo de valor deve ser preenchido.',
+            'valorServico.numeric' => 'O campo de valor deve ser numérico.',
+            'valorServico.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'duracaoServico.required' => 'O campo de valor deve ser preenchido.',
+            'duracaoServico.date_format' => 'O campo de duracao precisa estar no formato "hora:minuto:segundo"',
+
+            'statusServico.required' => 'O campo de valor deve ser preenchido.',
+
+        ]);
+
+
          $imagem = $request->file('fotoServico');
 
          if ($imagem == null) {
@@ -953,6 +1238,83 @@ public function updateStatusServicoAtivar(Request $request, $id)
         //  $request->validate($this->funcionario->Regras(), $this->funcionario->Feedback());
 
         //  $imagem = $request->input('fotoFuncionario');
+
+
+
+        $request->validate([
+            'fotoFuncionario' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'nomeFuncionario' => 'required|string|max:255',
+            'sobrenomeFuncionario' => 'required|string|max:255',
+            'especialidadeFuncionario' => 'required|string|max:255',
+            'inicioExpedienteFuncionario' => 'required|date_format:H:i',
+            'fimExpedienteFuncionario' => 'required|date_format:H:i|after:inicioExpedienteFuncionario',
+            'salarioFuncionario' => 'required|numeric|min:0',
+            'emailFuncionario' => 'required|email|max:255|unique:usuarios,email',
+            'senhaFuncionario' => 'required|string|min:6|confirmed',
+            'dddFuncionario' => 'required|digits:2',
+            'telefoneFuncionario' => 'required|digits:9',
+            'dataNascFuncionario' => 'required|date',
+            'descricaoFuncionario' => 'required|max:255',
+            'cargoFuncionario' => 'required|string|in:barbeiro,gerente',
+            'statusFuncionario' => 'required|string|in:ATIVO,DESATIVO',
+        ], [
+            // Mensagens de erro personalizadas
+            'fotoFuncionario.image' => 'O arquivo deve ser uma imagem.',
+            'fotoFuncionario.mimes' => 'A imagem deve ser dos tipos: jpeg, png, jpg, gif.',
+            'fotoFuncionario.max' => 'A imagem não pode ser maior que 2MB.',
+
+            'nomeFuncionario.required' => 'O campo Nome é obrigatório.',
+            'nomeFuncionario.string' => 'O campo Nome deve ser uma string.',
+            'nomeFuncionario.max' => 'O campo Nome não pode ter mais de 255 caracteres.',
+
+            'sobrenomeFuncionario.required' => 'O campo Sobrenome é obrigatório.',
+            'sobrenomeFuncionario.string' => 'O campo Sobrenome deve ser uma string.',
+            'sobrenomeFuncionario.max' => 'O campo Sobrenome não pode ter mais de 255 caracteres.',
+
+            'especialidadeFuncionario.required' => 'O campo de especialidade é obrigatório.',
+            'especialidadeFuncionario.string' => 'O campo de especialidade deve ser uma string.',
+            'especialidadeFuncionario.max' => 'O campo de especialidade não pode ter mais de 255 caracteres.',
+
+            'inicioExpedienteFuncionario.required' => 'O campo de início de expediente é obrigatório.',
+            'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto".',
+
+            'fimExpedienteFuncionario.required' => 'O campo de fim de expediente é obrigatório.',
+            'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto".',
+            'fimExpedienteFuncionario.after' => 'O campo de fim de expediente deve ser uma hora após o início do expediente.',
+
+            'salarioFuncionario.required' => 'O campo de salário é obrigatório.',
+            'salarioFuncionario.numeric' => 'O campo de salário deve ser numérico.',
+            'salarioFuncionario.min' => 'O campo de salário deve ser no mínimo 0.',
+
+            'emailFuncionario.required' => 'O campo de email é obrigatório.',
+            'emailFuncionario.email' => 'O campo de email deve ser um email válido.',
+            'emailFuncionario.max' => 'O campo de email não pode ter mais de 255 caracteres.',
+            'emailFuncionario.unique' => 'Este email já está em uso.',
+
+            'senhaFuncionario.required' => 'O campo de senha é obrigatório.',
+            'senhaFuncionario.string' => 'O campo de senha deve ser uma string.',
+            'senhaFuncionario.min' => 'O campo de senha deve ter no mínimo 6 caracteres.',
+            'senhaFuncionario.confirmed' => 'A confirmação da senha não coincide.',
+
+            'dddFuncionario.required' => 'O campo de DDD é obrigatório.',
+            'dddFuncionario.digits' => 'O campo de DDD deve ter 2 dígitos.',
+
+            'telefoneFuncionario.required' => 'O campo de telefone é obrigatório.',
+            'telefoneFuncionario.digits' => 'O campo de telefone deve ter 9 dígitos.',
+
+            'dataNascFuncionario.required' => 'O campo de data de nascimento é obrigatório.',
+            'dataNascFuncionario.date' => 'O campo de data de nascimento deve ser uma data válida.',
+
+            'descricaoFuncionario.required' => 'O campo de descrição é obrigatório.',
+            'descricaoFuncionario.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+
+            'cargoFuncionario.required' => 'O campo de cargo é obrigatório.',
+            'cargoFuncionario.in' => 'O campo de cargo deve ser "barbeiro" ou "gerente".',
+
+            'statusFuncionario.required' => 'O campo de status é obrigatório.',
+            'statusFuncionario.in' => 'O campo de status deve ser "ATIVO" ou "DESATIVO".',
+        ]);
+
 
 
 

@@ -421,7 +421,7 @@ transition-duration: 1s;
                                        @if ($funcionarioMes == null)
                                         Sem Registro!
                                        @else
-                                       {{ $funcionarioDoMes }} / R$
+                                       {{ $funcionarioMes }} / R$
                                        {{ number_format($comissao, 2, ',', '.') }}
 
                                        @endif
@@ -512,21 +512,7 @@ transition-duration: 1s;
                             <div class="col-lg-6 col-7">
                                 <h6 class="text-white">Ultimas vendas!</h6>
                             </div>
-                            <div class="col-lg-6 col-5 my-auto text-end">
-                                <div class="dropdown float-lg-end pe-4">
-                                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class="fa fa-ellipsis-v text-secondary"></i>
-                                    </a>
-                                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another
-                                                action</a></li>
-                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else
-                                                here</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
@@ -603,42 +589,41 @@ transition-duration: 1s;
 
                             <div class="formulario">
                                 <div class="input-box nomeProduto">
-                                    <select value="{{ old('nomeVenda') }}" placeholder="Nome do produto:" required
-                                        @error('nomeVenda') is-invalid @enderror id="nomeVenda" name="nomeVenda" required
-                                        maxlength="100">
-                                        @error('nomeVenda')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                                    <select value="{{ old('nomeVenda') }}" placeholder="Nome do produto:" id="nomeVenda" name="nomeVenda">
                                         <option value="">Selecione um nome</option>
                                         @foreach ($produtos as $produto)
                                             <option value="{{ $produto->nomeProduto }}">{{ $produto->nomeProduto }}
                                             </option>
                                         @endforeach
                                     </select>
+
                                 </div>
+                                @error('nomeVenda')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
                                 <div class="input-box">
                                     <input type="text" value="{{ old('valorVenda') }}"
-                                        placeholder="Valor do produto:" required @error('valorVenda') is-invalid @enderror
-                                        id="valorVenda" name="valorVenda" required maxlength="100">
-                                    @error('valorVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        placeholder="Valor do produto:" id="valorVenda" name="valorVenda">
+
+                                        @error('valorVenda')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-box">
                                     <input type="text" value="{{ old('qntVenda') }}"
-                                        placeholder="Quantidade vendida:" required @error('qntVenda') is-invalid @enderror
-                                        id="qntVenda" name="qntVenda" required maxlength="100">
-                                    @error('qntVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        placeholder="Quantidade vendida:" id="qntVenda" name="qntVenda">
+
+                                        @error('qntVenda')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-box">
                                     <input type="text" value="{{ old('descricaoVenda') }}"
-                                        placeholder="Descrição do produto:" required
-                                        @error('descricaoVenda') is-invalid @enderror id="descricaoVenda"
-                                        name="descricaoVenda" required maxlength="100">
-                                    @error('descricaoVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        placeholder="Descrição do produto:" id="descricaoVenda"
+                                        name="descricaoVenda">
+
+                                        @error('descricaoVenda')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="button enviar input-box">
@@ -651,21 +636,39 @@ transition-duration: 1s;
             </div>
 
             <div class="d-flex justify-content-end">
-                <a href="{{ route('adc.produto') }}" class="justify-end">
-                    <button class="cssbuttons-io-button" style="margin-bottom:55px; margin-top:35px;">Produto
-                        <div class="icon">
-                            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                                    fill="currentColor"></path>
-                            </svg>
-                        </div>
-                    </button>
-                </a>
+
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('produto.esgotado') }}" class="justify-end">
+                        <button class="cssbuttons-io-button" style="margin-bottom:55px; margin-top:35px; ">Esgotados
+                            <div class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </button>
+                    </a>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('adc.produto') }}" class="justify-end">
+                        <button class="cssbuttons-io-button" style="margin-bottom:55px; margin-top:35px; margin-left:30px;">Adicionar
+                            <div class="icon">
+                                <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                                        fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </button>
+                    </a>
+                </div>
+
+
             </div>
 
 
-            <div data-aos="fade-left" class="container">
+            <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
                     style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
                     <h6 class="section-title bg-white text-center text-primary px-3">Relatório de produtos da barbearia

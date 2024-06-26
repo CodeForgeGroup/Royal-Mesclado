@@ -89,6 +89,7 @@ Route::middleware(['autenticacao:gerente'])->group(function() {
     Route::post('/dashboard/gerente/adcHorario', [GerenteController::class, 'storeHorario'])->name('adicionar.horario');
 
 
+    Route::get('/dashboard/gerente/esgotado', [GerenteController::class, 'produtoEsgotado'])->name('produto.esgotado');
     Route::get('/dashboard/gerente/adcproduto', [GerenteController::class, 'adcproduto'])->name('adc.produto');
     Route::post('/dashboard/gerente/adcproduto', [GerenteController::class, 'storeproduto'])->name('adicionar.produto');
     Route::get('/dashboard/gerente/{id}/editProduto', [GerenteController::class, 'editProduto'])->name('edit.produto');

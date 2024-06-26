@@ -94,6 +94,37 @@
 
     <link rel="stylesheet" href="{{ asset('dashboard/css/styleServico.css') }}">
 
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+    navbar-scroll="true">
+    <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+            <h6 class="text-black font-weight-bolder  mb-0">Gerencie os serviços inativados, {{ ucfirst(session('nome')) }}!</h6>
+            <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ ucfirst(session('cargo')) }}</li>
+            </ol>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+        </div>
+        <ul class="navbar-nav  justify-content-end">
+            <li class="nav-item d-column align-items-center">
+                <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                    <img src="" alt="">
+                    <a class="d-sm-inline d-none" href="{{ url('/login') }}">Sair</a>
+                </a>
+            </li>
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                    <div class="sidenav-toggler-inner">
+                        <i class="sidenav-toggler-line"></i>
+                        <i class="sidenav-toggler-line"></i>
+                        <i class="sidenav-toggler-line"></i>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
     <div data-aos="fade-left" class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
