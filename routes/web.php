@@ -147,3 +147,4 @@ Route::get('/emailFuncionario', [AgendamentoController::class, 'getEmailFunc'])-
 Route::get('/emailCliente', [AgendamentoController::class, 'getEmailCli'])->name('email.cliente');
 
 Route::post('/loginApi', [LoginController::class, 'login'])->name('login.api');
+Route::get('/agendamento/show/{id}', [AgendamentoController::class, 'show'])->name('show.agendamento');

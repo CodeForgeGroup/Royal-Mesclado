@@ -451,9 +451,27 @@ public function store(Request $request)
      * @param  \App\Models\Agendamento  $agendamento
      * @return \Illuminate\Http\Response
      */
-    public function show(Agendamento $agendamento, $servico)
+    public function show($id)
     {
-        return $servico;
+        $cliente = Cliente::find($id);
+
+        if ($cliente === null){
+            if (is_null($cliente)) {
+                return response()->json(['message' => 'Cliente não encontrado'], 404);
+            }
+        }
+
+
+
+        $agendamentos = Agendamento::with(['servico', 'funcionario'])
+        ->where("cliente_id", $id)
+        ->where(function ($query){
+            $query->where('statusServico', 'PENDENTE')
+                  ->orWhere('statusServico', 'CONFIRMADO')
+                  ->orWhere('statusServico', 'CANCELADO');
+        })->get();
+
+    return response()->json($agendamentos);
     }
 
 
