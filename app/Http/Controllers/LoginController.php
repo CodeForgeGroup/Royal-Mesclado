@@ -115,7 +115,7 @@ class LoginController extends Controller
                 $token = $usuario->createToken('Token de acesso')->plainTextToken;
 
                 return response()->json([
-                    'message' => 'Login com sucésso!',
+                    'message' => 'Login com sucesso!',
                     'usuario' => [
                         'id' => $usuario->id,
                         'nome' => $usuario->nome,

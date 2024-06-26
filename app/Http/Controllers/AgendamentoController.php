@@ -474,6 +474,21 @@ public function store(Request $request)
     return response()->json($agendamentos);
     }
 
+    public function cancelarAgendamento(Request $request, $id){
+
+    $agendamento = $this->agendamento->find($id);
+
+    if($agendamento === null){
+        return response()->json(['erro' => 'Impossível realizar a atualização. O agendamento não existe!'], 404);
+    }
+
+    $agendamento->update([
+        'statusServico' => $request->statusAgendamento
+    ]);
+
+    return response()->json($agendamento, 200);
+    }
+
 
     public function showStatus(){
 
