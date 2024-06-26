@@ -974,7 +974,7 @@
                         <div class="input-group-desc">
                             <input class="input--style-5" style="width:100px;" type="text"
                                 @php
-$testeDD = '(' . substr($gerente->numeroFuncionario, 0, 2) . ')' @endphp
+        $testeDD = '(' . substr($gerente->numeroFuncionario, 0, 2) . ')' @endphp
                                 value="{{ $testeDD }}" id="dddFuncionario" name="dddFuncionario" maxlength="100">
                             <label class="label--desc">DDD</label>
 
