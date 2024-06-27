@@ -190,7 +190,7 @@
             </div>
         </div>
 
-        <div class="row my-4">
+        <d  iv class="row my-4">
             <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
                 <div class="card">
                     <div class="card-header pb-0">
@@ -198,7 +198,7 @@
                             <div class="col-lg-6 col-7">
                                 <h6 class="text-white">Ultimas vendas!</h6>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
@@ -256,35 +256,25 @@
                     </div>
                 </div>
             </div>
+
+
             <div class="col-lg-4 col-md-6">
+
                 <div class="card h-100">
+
+                @if ($agendamentos == null)
+
+                <h6 class="text-white">Nenhuma Agendamento realizado!</h6>
+
+                @else
                     <div class="card-header pb-0">
                         <h6 class="text-white">Ultimos agendamentos</h6>
                         <p class="text-sm">
                             <span class="font-weight-bold">Confira!</span>
                         </p>
                     </div>
-                    @if(isset($mensagem))
 
-
-                        <div class="card-body p-3">
-                            <div class="timeline timeline-one-side">
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="fa fa-arrow-up"></i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-white text-dark text-sm font-weight-bold mb-0">
-                                            {{ $mensagem }}
-                                        </h6>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    @else
-                        @foreach ($agendamentosFuturos as $agendamento)
+                        @foreach ($agendamentos as $agendamento)
 
                         <div class=" p-3">
                             <div class="timeline-one-side">

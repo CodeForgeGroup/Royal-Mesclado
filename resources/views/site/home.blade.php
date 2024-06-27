@@ -4,6 +4,20 @@
 
 @section('conteudo')
 
+<style>
+
+.media-feature{
+    background: transparent!important;
+}
+h3, h2{
+    color: white
+}
+p{
+    color: gainsboro
+}
+
+</style>
+
     <section class="site-hero overlay" data-stellar-background-ratio="0.5"
         style="background-image: url(images/banner.jpeg); background-position: 0;">
         <div class="container">
@@ -259,7 +273,7 @@
                       <div class="mr-3 icon-wrap"><span class="custom-icon flaticon-hair-comb"></span></div>
                       <div class="media-body">
                         <h3>Pente para Cabelo</h3>
-                        <p>Desembarace e modele seu cabelo com facilidade usando nosso pente profissional. Tenha um cabelo sempre arrumado e com um aspecto impecável.</p>
+                        <p>Desembarace e modele seu cabelo com facilidade usando nosso pente profissional. Tenha um cabelo sempre arrumado e com um aspecto impecável utilizando de diversas camadas e volumes</p>
                       </div>
                     </div>
                   </div>
@@ -269,20 +283,25 @@
     </section>
     <!-- END section -->
 
-    <section class="section-cover cta" data-stellar-background-ratio="0.5" style="background-image: url(images/big_image_2.jpeg); background-position: 0;">
+    <section class="section-cover cta" data-stellar-background-ratio="0.5" style="background-image: url(images/autoestima.png); background-position: 0;">
         <div class="container">
           <div class="row justify-content-center align-items-center intro">
             <div class="col-md-8 text-center element-animate">
-              <h2 class="mb-4"><span>Agende um Corte de Cabelo Hoje e</span> Ganhe 25% de Desconto</h2>
+              <h2 class="mb-4"><span>Agende um Corte de Cabelo Hoje e</span> aumente sua autoestima</h2>
               <p><a href="{{ url('/contato') }}" class="btn btn-black">Agende Agora</a></p>
             </div>
           </div>
         </div>
       </section>
 
+
     <!-- END section -->
 
-    <section class="site-section">
+
+
+
+
+    <section class="site-section" style="padding-top: 100px;">
         <div class="container">
           <div class="row">
             <div class="col-md-6 video-wrap mb-5">
@@ -300,5 +319,22 @@
       </section>
 
     <!-- END section -->
+
+
+    <section class="site-section" style="background: #ff6d26">
+
+        <div class="d-flex justify-content-around container">
+            <div class="col-2">
+                <h2>Conheça o App Royal Barber</h2>
+                <p>Estamos empolgados em anunciar que agora você pode levar a experiência premium da Royal Barber aonde quer que vá com nosso novo aplicativo!</p>
+            </div>
+            <div class="col-2">
+                <img src="{{ url('images/mobile.png') }}" style="width: 400px" alt="">
+            </div>
+        </div>
+
+    </section>
+
+
 
 @endsection

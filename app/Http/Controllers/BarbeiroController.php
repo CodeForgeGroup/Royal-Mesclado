@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Agendamento;
 use App\Models\Funcionario;
 use App\Models\Materiais;
+use App\Models\Produtos;
 use App\Models\Servico;
 use App\Models\Trabalhos;
 use App\Models\Usuario;
@@ -205,7 +206,7 @@ class BarbeiroController extends Controller
             'emailFuncionario' => $request->emailFuncionario,
             'especialidadeFuncionario' => $request->especialidadeFuncionario,
             'fotoFuncionario' => $barbeiro->fotoFuncionario,
-            
+
             'descricaoFuncionario' => $barbeiro->descricaoFuncionario,
             'dataNascFuncionario' => $barbeiro->dataNascFuncionario,
             'inicioExpedienteFuncionario' => $barbeiro->inicioExpedienteFuncionario,
@@ -243,6 +244,8 @@ class BarbeiroController extends Controller
 
         $mesAtual = date('m');
         $mesAnterior = date('m') - 1;
+        $produtos = Produtos::where('statusProduto', 'ativo')->where('estoqueProduto', '>', 0)->get();
+
 
         $vendas = Vendas::where('idFuncionario', '=', $idBarbeiro)
             ->whereMonth('created_at', $mesAtual)
@@ -314,6 +317,8 @@ class BarbeiroController extends Controller
 
         $comissao = $receitaProduto - (30 / 100) * $receitaProduto;
 
+        $comissao = $receitaProduto - $comissao;
+
         $comissaoMesAnterior = $receitaProdutoAnterior - (30 / 100) * $receitaProdutoAnterior;
 
         $porcentagemComissao = 0; // Initialize variable
@@ -336,7 +341,8 @@ class BarbeiroController extends Controller
             'comissao',
             'porcentagemComissao',
             'porcentagemCliente',
-            'porcentagemVendas'
+            'porcentagemVendas',
+            'produtos'
         ));
     }
 
@@ -366,6 +372,32 @@ class BarbeiroController extends Controller
         // Cria uma nova instância de Vendas
         //  $testeNome = $request->nomeVenda;
 
+        $request->validate([
+            // 'fotoServico' => 'required|max:255',
+            'nomeVenda' => 'required',
+            'valorVenda' => 'required|numeric|min:1',
+            'qntVenda' => 'required|numeric|min:1',
+            'descricaoVenda' => 'required|string|max:200',
+        ], [
+            // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            'nomeVenda.required' => 'O campo nome é obrigatório.',
+
+            'valorVenda.required' => 'O campo de valor deve ser preenchido.',
+            'valorVenda.numeric' => 'O campo de valor deve ser numérico.',
+            'valorVenda.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'qntVenda.required' => 'O campo de valor deve ser preenchido.',
+            'qntVenda.numeric' => 'O campo de quantidade deve ser numérico.',
+
+            'descricaoVenda.required' => 'O campo descrição deve ser preenchido.',
+            'descricaoVenda.max' => 'O campo descrição não pode ter mais de 200 caracteres.',
+
+        ]);
+
+
+
+
         $venda = new vendas;
 
         // Define as propriedades de 'venda' com os dados da requisição
@@ -379,6 +411,24 @@ class BarbeiroController extends Controller
         // dd($venda->valorVenda);
         $venda->save();
 
+        $produto = Produtos::where('nomeProduto', $request->nomeVenda)->first();
+
+        // dd($produto);
+
+        $estoque = $produto->estoqueProduto - $request->qntVenda;
+
+        if ($estoque > 0) {
+
+            $produto->update([
+                'estoqueProduto' => $estoque,
+            ]);
+        } else {
+
+            $produto->update([
+                'estoqueProduto' => $estoque,
+                'statusProduto' => 'inativo',
+            ]);
+        }
 
         // 2. Redirecionamento com mensagem flash (adequado para aplicações web)
         return Redirect::back()->with('success', 'Venda registrada!');

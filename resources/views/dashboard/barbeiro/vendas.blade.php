@@ -8,6 +8,24 @@
     .topo{
         color: #ff6d24;
     }
+    .nomeProduto select {
+            margin-top: 15px;
+            height: 100%;
+            outline: none;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: gray;
+            transition: all 0.3s ease;
+            background-color: transparent;
+        }
+
+        .nomeProduto {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+            width: 40%
+        }
 </style>
 
 @section('conteudo')
@@ -256,37 +274,42 @@
 
 
                             <div class="formulario">
-                                <div class="input-box">
-                                    <input type="text" value="{{ old('nomeVenda') }}" placeholder="Nome do produto:"
-                                        required @error('nomeVenda') is-invalid @enderror id="nomeVenda" name="nomeVenda"
-                                        required maxlength="100">
-                                    @error('nomeVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                <div class="input-box nomeProduto">
+                                    <select value="{{ old('nomeVenda') }}" placeholder="Nome do produto:" id="nomeVenda" name="nomeVenda">
+                                        <option value="">Selecione um nome</option>
+                                        @foreach ($produtos as $produto)
+                                            <option value="{{ $produto->nomeProduto }}">{{ $produto->nomeProduto }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
                                 </div>
+                                @error('nomeVenda')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
                                 <div class="input-box">
                                     <input type="text" value="{{ old('valorVenda') }}"
-                                        placeholder="Valor do produto:" required @error('valorVenda') is-invalid @enderror
-                                        id="valorVenda" name="valorVenda" required maxlength="100">
-                                    @error('valorVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        placeholder="Valor do produto:" id="valorVenda" name="valorVenda">
+
+                                        @error('valorVenda')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-box">
                                     <input type="text" value="{{ old('qntVenda') }}"
-                                        placeholder="Quantidade vendida:" required @error('qntVenda') is-invalid @enderror
-                                        id="qntVenda" name="qntVenda" required maxlength="100">
-                                    @error('qntVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        placeholder="Quantidade vendida:" id="qntVenda" name="qntVenda">
+
+                                        @error('qntVenda')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-box">
                                     <input type="text" value="{{ old('descricaoVenda') }}"
-                                        placeholder="Descrição do produto:" required
-                                        @error('descricaoVenda') is-invalid @enderror id="descricaoVenda"
-                                        name="descricaoVenda" required maxlength="100">
-                                    @error('descricaoVenda')
-                                        <span class="invalid-feedback">{{ $message }}</span>
+                                        placeholder="Descrição do produto:" id="descricaoVenda"
+                                        name="descricaoVenda">
+
+                                        @error('descricaoVenda')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="button enviar input-box">

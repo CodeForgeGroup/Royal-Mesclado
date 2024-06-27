@@ -40,6 +40,7 @@ class GerenteController extends Controller
         $idFuncionario = session('id');
         $funcionario = Funcionario::find($idFuncionario);
         $mesAtual = date('m');
+        $diaAtual = date('d');
 
         if (!$funcionario) {
             abort(404, 'Funcionário não encontrado');
@@ -92,17 +93,16 @@ class GerenteController extends Controller
 
         //============================================AGENDAMENTO==============================================
 
-        $agendamentos = Agendamento::with(['cliente', 'servico', 'funcionario'])->orderBy('dataAgendamento', 'asc')->get();
+        $agendamentos = Agendamento::with(['cliente', 'servico', 'funcionario'])
+        ->whereDay('dataAgendamento', $diaAtual)
+        ->where('statusServico', 'CONFIRMADO')
+        ->orderBy('dataAgendamento', 'asc')->get();
+
+        // dd($agendamentos);
 
 
-        $agendamentosFuturos = $agendamentos->filter(function ($agendamento) {
-            $dataHoraAgendamento = Carbon::parse($agendamento->dataAgendamento . ' ' . $agendamento->horarioInicial);
-            return $dataHoraAgendamento->gt(now());
-        });
 
-
-
-        return view('dashboard.gerente.index', compact('funcionario', 'vendas', 'lucroVendas', 'qntVenda', 'clientesMensais', 'totalFaturamento', 'lucroMensal', 'agendamentosFuturos'));
+        return view('dashboard.gerente.index', compact('funcionario', 'vendas', 'lucroVendas', 'qntVenda', 'clientesMensais', 'totalFaturamento', 'lucroMensal', 'agendamentos'));
     }
 
     public function listFuncionarios()
