@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Funcionario;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class FuncionarioController extends Controller
@@ -88,7 +89,10 @@ class FuncionarioController extends Controller
      */
     public function show(Funcionario $funcionario)
     {
-        //
+        $funcionarios = DB::select("SELECT f.id, f.nomeFuncionario, f.sobrenomeFuncionario, f.fotoFuncionario,f.especialidadeFuncionario
+        FROM funcionarios f WHERE statusFuncionario = 'ATIVO' AND cargoFuncionario = 'barbeiro'");
+
+        return response()->json($funcionarios);
     }
 
     /**

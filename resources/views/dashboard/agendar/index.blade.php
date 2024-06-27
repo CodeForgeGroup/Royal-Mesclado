@@ -66,10 +66,10 @@ perspective: 2700px;
                     <div class="d-flex border-top">
                         <!-- Formatando a duração do serviço para exibir apenas a hora e os minutos -->
                         @php
-                        // dd($item->duracaoServico);
-                            $duracao = \Carbon\CarbonInterval::hours($item->duracaoServico);
-                            $formattedDuracao = $duracao->format('%H:%I');
-                        @endphp
+                        // Supondo que $item->duracaoServico contenha a duração no formato HH:MM:SS
+                        $duracao = \Carbon\CarbonInterval::createFromFormat('H:i:s', $item->duracaoServico);
+                        $formattedDuracao = $duracao->format('%H:%I');
+                    @endphp
                         <small class="flex-fill text-center border-end py-2">
                             <i style="color: black;" class="fa fa-clock text-primary me-2"></i>{{ $formattedDuracao }} Hrs.
                         </small>
