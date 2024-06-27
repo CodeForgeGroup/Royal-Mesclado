@@ -119,6 +119,7 @@ class AgendamentoController extends Controller
             $funcionarioId = $request->input('funcionario_id');
             $nomeFunc = $request->input('nome_funcionario');
             $idServico = $request->input('idServico');
+            $clienteId = $request->input('cliente_id'); // Supondo que você está recebendo o cliente_id no request
 
             $servico = Servico::find($idServico);
             $duracaoServico = $servico->duracaoServico;
@@ -138,7 +139,7 @@ class AgendamentoController extends Controller
             // Log the converted service duration
             Log::info('Duracao em Minutos Convertida:', ['duracaoEmMinutos' => $duracaoEmMinutos]);
 
-            // Executa a consulta SQL para obter os horários disponíveis
+            // Executa a consulta SQL para obter os horários disponíveis considerando a disponibilidade do cliente e do funcionário
             $query = "
                 SELECT h.id AS horario_id, h.horarios
                 FROM horarios h
@@ -151,6 +152,15 @@ class AgendamentoController extends Controller
                     WHERE a.funcionario_id = ?
                     AND a.dataAgendamento = ?
                     AND a.statusServico != 'CANCELADO'
+                    UNION
+                    SELECT a.horario_id,
+                           a.horarioInicial,
+                           a.horarioFinal
+                    FROM agendamento a
+                    JOIN servicos s ON a.servico_id = s.id
+                    WHERE a.cliente_id = ?
+                    AND a.dataAgendamento = ?
+                    AND a.statusServico != 'CANCELADO'
                 ) a ON h.horarios BETWEEN a.horarioInicial AND a.horarioFinal
                 WHERE a.horario_id IS NULL
                 AND TIME(h.horarios) >= TIME(?)
@@ -159,7 +169,7 @@ class AgendamentoController extends Controller
 
             Log::info('Consulta SQL:', ['query' => $query]);
 
-            $horariosDisponiveis = DB::select($query, [$funcionarioId, $dataHorarios, $inicioExpediente, $duracaoEmMinutos, $fimExpediente]);
+            $horariosDisponiveis = DB::select($query, [$funcionarioId, $dataHorarios, $clienteId, $dataHorarios, $inicioExpediente, $duracaoEmMinutos, $fimExpediente]);
 
             // Log the available schedules
             Log::info('Horarios Disponiveis:', ['horariosDisponiveis' => $horariosDisponiveis]);

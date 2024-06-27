@@ -474,7 +474,8 @@ perspective: 2700px;
         <div><h2>Serviço</h2><span>{{ request()->get('nome_servico') }}</span></div> <br> <!-- Exemplo com o nome do serviço -->
         <div><h2>Valor</h2><span> R${{ request()->get('valor_servico') }}</span></div> <br>
         @php
-        $duracao = \Carbon\CarbonInterval::hours(request()->get('duracao_servico'));
+           // Supondo que $item->duracaoServico contenha a duração no formato HH:MM:SS
+        $duracao = \Carbon\CarbonInterval::createFromFormat('H:i:s', request()->get('duracao_servico'));
         $formattedDuracao = $duracao->format('%H:%I');
         @endphp
 
