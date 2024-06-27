@@ -896,7 +896,7 @@
 
                                 <div class="input-group-desc" style="margin-left: 7%;">
                                     <input class="input--style-5" style="width:300px;" type="text"
-                                        value="{{ number_format($funcionario->salarioFuncionario, 2, ',', '.') }}"
+                                        value="{{ $funcionario->salarioFuncionario }}"
                                         id="salarioFuncionario" name="salarioFuncionario" maxlength="100">
                                     <label class="label--desc">Salario</label>
 

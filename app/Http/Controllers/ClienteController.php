@@ -36,7 +36,7 @@ class ClienteController extends Controller
     }
 
     public function compromissos()
-{
+    {
     $id = session('id');
     $cliente = Cliente::find($id);
 
@@ -58,16 +58,16 @@ class ClienteController extends Controller
     // }
 
     return view('dashboard.cliente.compromissos', ['dados' => $dados], compact('cliente'));
-}
+    }
 
-public function perfil(){
+    public function perfil(){
     $id = session('id');
     $cliente = Cliente::find($id);
 
     return view('dashboard.cliente.perfil', compact('cliente'));
-}
+    }
 
-public function perfilEdit($id)
+    public function perfilEdit($id)
     {
         $cliente = Cliente::find($id);
         $senha = Usuario::where('tipo_usuario_id', $id)->first();
@@ -95,11 +95,39 @@ public function perfilEdit($id)
         $cliente = Cliente::find($id);
 
 
+
+        $request->validate([
+            // 'fotoServico' => 'required|max:255',
+            'nomeCliente' => 'required|string|max:150',
+            'sobrenomeCliente' => 'required|string|max:150',
+            'emailCliente' => 'required|email|unique:usuarios,email,' . $cliente->id,
+            'telefoneCliente' => 'required|numeric|min:9',
+            'enderecoCliente' => 'required',
+        ], [
+            // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            'nomeCliente.required' => 'O campo nome é obrigatório.',
+            'nomeCliente.string' => 'O campo nome deve ser uma string.',
+            'nomeCliente.max' => 'O campo nome não pode ter mais de 150 caracteres.',
+
+            'sobrenomeCliente.required' => 'O campo descrição deve ser preenchido.',
+            'sobrenomeCliente.max' => 'O campo descrição não pode ter mais de 255 caracteres.',
+
+            'telefoneCliente.required' => 'O campo de valor deve ser preenchido.',
+            'telefoneCliente.numeric' => 'O campo de valor deve ser numérico.',
+            'telefoneCliente.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'emailCliente.required' => 'O campo de email precisa ser preenchido.',
+            'emailCliente.email' => 'O campo de email precisa estar em formato de email',
+
+            'enderecoCliente.required' => 'O campo de valor deve ser preenchido.',
+
+        ]);
+
         $numeroFormatado = $request->dddCliente . $request->telefoneCliente;
 
         // $testeDDD = $request->dddCliente;
         // $testeNumero = $request->numeroCliente;
-        $numero_formatado = str_replace(array('R$', '.'), '', $request->salarioCliente);
 
         // Substituir a vírgula decimal por um ponto
         // $salarioCliente = str_replace(',', '.', $numero_formatado);

@@ -128,33 +128,32 @@ class GerenteController extends Controller
 
 
         $servicosFeitos = Agendamento::whereYear('agendamento.dataAgendamento', $anoAtual)
-        ->whereMonth('agendamento.dataAgendamento', $mesAtual)
-        ->where('statusServico', 'CONFIRMADO')
-        ->count('cliente_id');
+            ->whereMonth('agendamento.dataAgendamento', $mesAtual)
+            ->where('statusServico', 'CONFIRMADO')
+            ->count('cliente_id');
 
 
         $funcionarioDoMes = Agendamento::select('funcionario_id', DB::raw('count(funcionario_id) as total'))
-        ->whereYear('dataAgendamento', $anoAtual)
-        ->whereMonth('dataAgendamento', $mesAtual)
-        ->where('statusServico', 'CONFIRMADO')
-        ->groupBy('funcionario_id')
-        ->orderBy('total', 'desc')
-        ->first();
+            ->whereYear('dataAgendamento', $anoAtual)
+            ->whereMonth('dataAgendamento', $mesAtual)
+            ->where('statusServico', 'CONFIRMADO')
+            ->groupBy('funcionario_id')
+            ->orderBy('total', 'desc')
+            ->first();
 
 
         if ($funcionarioDoMes == null) {
 
             $totalFuncionario = '0';
-
-        }else {;
+        } else {;
             $totalfuncionario = $funcionarioDoMes->total;
         }
 
 
-        if($funcionarioDoMes){
+        if ($funcionarioDoMes) {
             $funcionarioMes = Funcionario::find($funcionarioDoMes->funcionario_id);
             $funcionarioDoMes = $funcionarioMes->nomeFuncionario;
-        }else{
+        } else {
             $funcionarioDoMes == null;
         }
 
@@ -164,13 +163,13 @@ class GerenteController extends Controller
 
 
         $funcionarioFaturamento = Agendamento::join('servicos', 'agendamento.servico_id', '=', 'servicos.id')
-        ->select('agendamento.funcionario_id', DB::raw('SUM(servicos.valorServico) as total_faturamento'))
-        ->whereYear('agendamento.dataAgendamento', $anoAtual)
-        ->whereMonth('agendamento.dataAgendamento', $mesAtual)
-        ->where('agendamento.statusServico', 'CONFIRMADO')
-        ->groupBy('agendamento.funcionario_id')
-        ->orderBy('total_faturamento', 'desc')
-        ->first();
+            ->select('agendamento.funcionario_id', DB::raw('SUM(servicos.valorServico) as total_faturamento'))
+            ->whereYear('agendamento.dataAgendamento', $anoAtual)
+            ->whereMonth('agendamento.dataAgendamento', $mesAtual)
+            ->where('agendamento.statusServico', 'CONFIRMADO')
+            ->groupBy('agendamento.funcionario_id')
+            ->orderBy('total_faturamento', 'desc')
+            ->first();
 
         // dd($funcionarioFaturamento);
 
@@ -181,7 +180,7 @@ class GerenteController extends Controller
         }
 
         $salarios = Funcionario::where('statusFuncionario', 'ativo')
-        ->sum('salarioFuncionario');
+            ->sum('salarioFuncionario');
 
 
         $faturamento = Agendamento::join('servicos', 'agendamento.servico_id', '=', 'servicos.id')
@@ -194,7 +193,7 @@ class GerenteController extends Controller
 
 
 
-        return view('dashboard.gerente.funcionarios', compact('funcionario', 'funcionarios', 'inicioExpediente', 'fimExpediente', 'funcionarioDoMes', 'total','servicosFeitos', 'salarios', 'faturamento', 'funcionarioFaturamento', 'funcionarioFaturamento'));
+        return view('dashboard.gerente.funcionarios', compact('funcionario', 'funcionarios', 'inicioExpediente', 'fimExpediente', 'funcionarioDoMes', 'total', 'servicosFeitos', 'salarios', 'faturamento', 'funcionarioFaturamento', 'funcionarioFaturamento'));
     }
 
     public function adicionarFunc()
@@ -247,91 +246,136 @@ class GerenteController extends Controller
 
 
     public function perfilUpdate(Request $request, $id)
-    {
+{
+    $gerente = Funcionario::find($id);
 
-        $gerente = Funcionario::find($id);
+    // Verifica se o funcionário existe
+    if ($gerente === null) {
+        return response()->json(['error' => 'Impossível realizar a operação. O barbeiro não existe'], 404);
+    }
+
+    $usuario = DB::table('usuarios')->where('tipo_usuario_id', $id)->first();
+
+    // Verifica se o usuário existe
+    if ($usuario === null) {
+        return response()->json(['error' => 'Impossível realizar a operação. O usuário não existe'], 404);
+    }
+
+    // Remove formatação e converte para inteiro
+    $salarioFuncionario = (int) str_replace(['.', ','], '', $request->salarioFuncionario);
+
+    $request->merge([
+        'numeroFuncionario' => str_replace('-', '', $request->numeroFuncionario),
+        'salarioFuncionario' => $salarioFuncionario,
+        'dddFuncionario' => str_replace(['(', ')'], '', $request->dddFuncionario),
+    ]);
 
 
-        $numeroFormatado = $request->dddFuncionario . $request->numeroFuncionario;
-        $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
+
+    $request->validate([
+        'nomeFuncionario' => 'required|string|max:255',
+        'sobrenomeFuncionario' => 'required|string|max:255',
+        'especialidadeFuncionario' => 'required|string|max:255',
+        'inicioExpedienteFuncionario' => 'required|date_format:H:i:s',
+        'fimExpedienteFuncionario' => 'required|date_format:H:i:s|after:inicioExpedienteFuncionario',
+        'salarioFuncionario' => 'required|numeric|min:0',
+        'emailFuncionario' => 'required|email|max:255|unique:usuarios,email,' . $gerente->id,
+        'senhaFuncionario' => 'required|string|min:6',
+        'dddFuncionario' => 'required|digits:2',
+        'numeroFuncionario' => 'required|digits:9',
+        'dataNascFuncionario' => 'required|date',
+        'descricaoFuncionario' => 'required|max:255',
+        // 'cargoFuncionario' => 'required|string|in:barbeiro,gerente',
+        // 'statusFuncionario' => 'required|string|in:ATIVO,DESATIVO',
+    ], [
+        'nomeFuncionario.required' => 'O campo Nome é obrigatório.',
+        'nomeFuncionario.string' => 'O campo Nome deve ser uma string.',
+        'nomeFuncionario.max' => 'O campo Nome não pode ter mais de 255 caracteres.',
+        'sobrenomeFuncionario.required' => 'O campo Sobrenome é obrigatório.',
+        'sobrenomeFuncionario.string' => 'O campo Sobrenome deve ser uma string.',
+        'sobrenomeFuncionario.max' => 'O campo Sobrenome não pode ter mais de 255 caracteres.',
+        'especialidadeFuncionario.required' => 'O campo de especialidade é obrigatório.',
+        'especialidadeFuncionario.string' => 'O campo de especialidade deve ser uma string.',
+        'especialidadeFuncionario.max' => 'O campo de especialidade não pode ter mais de 255 caracteres.',
+        'inicioExpedienteFuncionario.required' => 'O campo de início de expediente é obrigatório.',
+        'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto:segundo".',
+        'fimExpedienteFuncionario.required' => 'O campo de fim de expediente é obrigatório.',
+        'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto:segundo".',
+        'fimExpedienteFuncionario.after' => 'O campo de fim de expediente deve ser uma hora após o início do expediente.',
+        'salarioFuncionario.required' => 'O campo de salário é obrigatório.',
+        'salarioFuncionario.numeric' => 'O campo de salário deve ser numérico.',
+        'salarioFuncionario.min' => 'O campo de salário deve ser no mínimo 0.',
+        'emailFuncionario.required' => 'O campo de email é obrigatório.',
+        'emailFuncionario.email' => 'O campo de email deve ser um email válido.',
+        'emailFuncionario.max' => 'O campo de email não pode ter mais de 255 caracteres.',
+        'emailFuncionario.unique' => 'Este email já está em uso.',
+        'senhaFuncionario.required' => 'O campo de senha é obrigatório.',
+        'senhaFuncionario.string' => 'O campo de senha deve ser uma string.',
+        'senhaFuncionario.min' => 'O campo de senha deve ter no mínimo 6 caracteres.',
+        'dddFuncionario.required' => 'O campo de DDD é obrigatório.',
+        'dddFuncionario.digits' => 'O campo de DDD deve ter 2 dígitos.',
+        'numeroFuncionario.required' => 'O campo de número é obrigatório.',
+        'numeroFuncionario.digits' => 'O campo de número deve ter 9 dígitos.',
+        'dataNascFuncionario.required' => 'O campo de data de nascimento é obrigatório.',
+        'dataNascFuncionario.date' => 'O campo de data de nascimento deve ser uma data válida.',
+        'descricaoFuncionario.required' => 'O campo de descrição é obrigatório.',
+        'descricaoFuncionario.max' => 'O campo de descrição não pode ter mais de 255 caracteres.',
+    ]);
 
 
-        // $testeDDD = $request->dddFuncionario;
-        // $testeNumero = $request->numeroFuncionario;
-        $numero_formatado = str_replace(array('R$', '.'), '', $request->salarioFuncionario);
 
-        // Substituir a vírgula decimal por um ponto
-        $salarioFuncionario = str_replace(',', '.', $numero_formatado);
+    $numeroFormatado = $request->dddFuncionario . $request->numeroFuncionario;
 
+    $imagem_url = $gerente->fotoFuncionario;
 
-        // dd($request->salarioFuncionario );
-
-
-        // Verifica se o funcionário existe
-        if ($gerente === null) {
-            return response()->json(['error' => 'Impossível realizar a operação. O barbeiro não existe'], 404);
+    if ($request->hasFile('fotoFuncionario') && $request->file('fotoFuncionario')->isValid()) {
+        // Remover a imagem antiga, se existir
+        if ($gerente->fotoFuncionario) {
+            Storage::disk('public')->delete($gerente->fotoFuncionario);
         }
 
-        $usuario = DB::select('SELECT * FROM usuarios WHERE tipo_usuario_id = ?', [$id]);
-
-        // Verifica se o usuário existe
-        if ($usuario === null) {
-            return response()->json(['error' => 'Impossível realizar a operação. O usuário não existe'], 404);
-        }
-
-
-
-        if ($request->hasFile('fotoFuncionario') && $request->file('fotoFuncionario')->isValid()) {
-            // Remover a imagem antiga, se existir
-            if ($gerente->fotoFuncionario) {
-                Storage::disk('public')->delete($gerente->fotoFuncionario);
-            }
-
-            // Salvar a nova imagem
-            $imagem = $request->file('fotoFuncionario');
-            $imagem_url = $imagem->store('imagem', 'public');
-        }
-
-
-        // dd($request->input('fotoFuncionario'));
         // Salvar a nova imagem
         $imagem = $request->file('fotoFuncionario');
         $imagem_url = $imagem->store('imagem', 'public');
+    } else {
+        // Mantém a imagem antiga
+        $imagem_url = $gerente->fotoFuncionario;
+    }
 
+    $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
 
+    $gerente->update([
+        'fotoFuncionario' => $imagem_url,
+        'nomeFuncionario' => $request->nomeFuncionario,
+        'sobrenomeFuncionario' => $request->sobrenomeFuncionario,
+        'numeroFuncionario' => $numeroFuncionario,
+        'emailFuncionario' => $request->emailFuncionario,
+        'especialidadeFuncionario' => $request->especialidadeFuncionario,
+        'descricaoFuncionario' => $request->descricaoFuncionario,
+        'dataNascFuncionario' => $request->dataNascFuncionario,
+        'inicioExpedienteFuncionario' => $request->inicioExpedienteFuncionario,
+        'fimExpedienteFuncionario' => $request->fimExpedienteFuncionario,
+        'cargoFuncionario' => $request->cargoFuncionario,
+        'descricaoFuncionario' => $request->descricaoFuncionario,
+        'salarioFuncionario' => $salarioFuncionario,
+        'statusFuncionario' => $request->statusFuncionario
+    ]);
 
-        $gerente->update([
-            'fotoFuncionario' => $imagem_url,
-            'nomeFuncionario' => $request->nomeFuncionario,
-            'sobrenomeFuncionario' => $request->sobrenomeFuncionario,
-            'numeroFuncionario' => $numeroFuncionario,
-            'emailFuncionario' => $request->emailFuncionario,
-            'especialidadeFuncionario' => $request->especialidadeFuncionario,
-            'descricaoFuncionario' => $request->descricaoFuncionario,
-            'dataNascFuncionario' => $request->dataNascFuncionario,
-            'inicioExpedienteFuncionario' => $request->inicioExpedienteFuncionario,
-            'fimExpedienteFuncionario' => $request->fimExpedienteFuncionario,
-            'cargoFuncionario' => $request->cargoFuncionario,
-            'qntCortesFuncionario' => '0',
-            'salarioFuncionario' => $salarioFuncionario,
-            'statusFuncionario' => $request->statusFuncionario
+    DB::table('usuarios')
+        ->where('tipo_usuario_id', $id)
+        ->where('tipo_usuario_type', 'funcionario')
+        ->update([
+            'nome' => $request->nomeFuncionario,
+            'email' => $request->emailFuncionario,
+            'senha' => $request->senhaFuncionario,
         ]);
 
-
-        DB::table('usuarios')
-            ->where('tipo_usuario_id', $id)
-            ->update([
-                'nome' => $request->nomeFuncionario,
-                'email' => $request->emailFuncionario,
-                'senha' => $request->senhaFuncionario,
-
-            ]);
-
-
-
+    if ($request->emailFuncionario != $gerente->emailFuncionario) {
         return redirect()->route('login');
-
     }
+
+    return redirect()->route('gerente.perfil');
+}
 
 
 
@@ -355,10 +399,14 @@ class GerenteController extends Controller
 
         $request->merge([
             'telefoneFuncionario' => str_replace('-', '', $request->telefoneFuncionario),
-            'salarioFuncionario' => str_replace(['R$', '.', ','], '', $request->salarioFuncionario),
             'dddFuncionario' => str_replace(['(', ')'], '', $request->dddFuncionario),
         ]);
 
+
+    $salarioFuncionario = str_replace(['.', ','], [ '', ''], $request->salarioFuncionario);
+
+
+    // dd($gerente);
 
 
         $request->validate([
@@ -367,8 +415,8 @@ class GerenteController extends Controller
             'especialidadeFuncionario' => 'required|string|max:255',
             'inicioExpedienteFuncionario' => 'required|date_format:H:i:s',
             'fimExpedienteFuncionario' => 'required|date_format:H:i:s|after:inicioExpedienteFuncionario',
-            'salarioFuncionario' => 'required|numeric|min:0',
-            'emailFuncionario' => 'required|email|max:255|unique:usuarios,email,'.$id,
+            'salarioFuncionario' => 'required|numeric',
+            'emailFuncionario' => 'required|email|max:255|unique:usuarios,email,' . $id,
             'senhaFuncionario' => 'required|string|min:6',
             'dddFuncionario' => 'required|digits:2',
             'telefoneFuncionario' => 'required|digits:9',
@@ -391,15 +439,14 @@ class GerenteController extends Controller
             'especialidadeFuncionario.max' => 'O campo de especialidade não pode ter mais de 255 caracteres.',
 
             'inicioExpedienteFuncionario.required' => 'O campo de início de expediente é obrigatório.',
-            'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto".',
+            'inicioExpedienteFuncionario.date_format' => 'O campo de início de expediente deve estar no formato "hora:minuto:segundo".',
 
             'fimExpedienteFuncionario.required' => 'O campo de fim de expediente é obrigatório.',
-            'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto".',
+            'fimExpedienteFuncionario.date_format' => 'O campo de fim de expediente deve estar no formato "hora:minuto:segundo".',
             'fimExpedienteFuncionario.after' => 'O campo de fim de expediente deve ser uma hora após o início do expediente.',
 
             'salarioFuncionario.required' => 'O campo de salário é obrigatório.',
             'salarioFuncionario.numeric' => 'O campo de salário deve ser numérico.',
-            'salarioFuncionario.min' => 'O campo de salário deve ser no mínimo 0.',
 
             'emailFuncionario.required' => 'O campo de email é obrigatório.',
             'emailFuncionario.email' => 'O campo de email deve ser um email válido.',
@@ -425,6 +472,9 @@ class GerenteController extends Controller
         ]);
 
 
+
+
+
         $numeroFormatado = $request->dddFuncionario . $request->telefoneFuncionario;
 
         // $testeDDD = $request->dddFuncionario;
@@ -433,8 +483,6 @@ class GerenteController extends Controller
 
 
         // dd($request->salarioFuncionario );
-
-
 
 
         if ($request->hasFile('fotoFuncionario') && $request->file('fotoFuncionario')->isValid()) {
@@ -446,14 +494,14 @@ class GerenteController extends Controller
             // Salvar a nova imagem
             $imagem = $request->file('fotoFuncionario');
             $imagem_url = $imagem->store('imagem', 'public');
-        }else {
+        } else {
             // Mantém a imagem antiga
             $imagem_url = $gerente->fotoFuncionario;
         }
 
 
-
         $numeroFuncionario = preg_replace('/[^0-9]/', '', $numeroFormatado);
+
 
         $gerente->update([
             'fotoFuncionario' => $imagem_url,
@@ -468,13 +516,14 @@ class GerenteController extends Controller
             'fimExpedienteFuncionario' => $request->fimExpedienteFuncionario,
             'cargoFuncionario' => $request->cargoFuncionario,
             'descricaoFuncionario' => $request->descricaoFuncionario,
-            'salarioFuncionario' => $request->salarioFuncionario,
+            'salarioFuncionario' => $salarioFuncionario,
             'statusFuncionario' => $request->statusFuncionario
         ]);
 
 
         DB::table('usuarios')
             ->where('tipo_usuario_id', $id)
+            ->where('tipo_usuario_type', 'funcionario')
             ->update([
                 'nome' => $request->nomeFuncionario,
                 'email' => $request->emailFuncionario,
@@ -485,7 +534,6 @@ class GerenteController extends Controller
 
 
         return redirect()->route('list.func');
-
     }
 
     // CLIENTE
@@ -518,16 +566,15 @@ class GerenteController extends Controller
             ->orderBy('total', 'desc')
             ->first();
 
-            // dd($servicoFav);
+        // dd($servicoFav);
 
-            if ($servicoFav) {
-                $servico = Servico::find($servicoFav->servico_id);
+        if ($servicoFav) {
+            $servico = Servico::find($servicoFav->servico_id);
             //     if ($servico) {
-                $servicoFav = $servico->nomeServico;
-            }
-            else{
-                $servicoFav = null;
-            }
+            $servicoFav = $servico->nomeServico;
+        } else {
+            $servicoFav = null;
+        }
 
         $clienteDoMes = Agendamento::select('cliente_id', DB::raw('count(cliente_id) as total'))
             ->whereYear('dataAgendamento', $anoAtual)
@@ -537,20 +584,19 @@ class GerenteController extends Controller
             ->orderBy('total', 'desc')
             ->first();
 
-            if ($clienteDoMes == null) {
+        if ($clienteDoMes == null) {
 
-                $totalCliente = '0';
+            $totalCliente = '0';
+        } else {;
+            $totalCliente = $clienteDoMes->total;
+        }
 
-            }else {;
-                $totalCliente = $clienteDoMes->total;
-            }
-
-            if($clienteDoMes){
-                $clienteMes = Cliente::find($clienteDoMes->cliente_id);
-                $clienteDoMes = $clienteMes->nomeCliente;
-            }else{
-                $clienteDoMes == null;
-            }
+        if ($clienteDoMes) {
+            $clienteMes = Cliente::find($clienteDoMes->cliente_id);
+            $clienteDoMes = $clienteMes->nomeCliente;
+        } else {
+            $clienteDoMes == null;
+        }
 
 
 
@@ -583,8 +629,8 @@ class GerenteController extends Controller
         $mesAtual = Carbon::now()->month;
 
         $qtdVendas = Vendas::whereMonth('created_at', $mesAtual)
-        ->whereYear('created_at', $anoAtual)
-        ->count('id');
+            ->whereYear('created_at', $anoAtual)
+            ->count('id');
 
         $vendas = Vendas::whereMonth('vendas.created_at', $mesAtual)
             ->orderBy('vendas.created_at', 'desc')
@@ -596,31 +642,31 @@ class GerenteController extends Controller
 
 
         $funcionarioDoMes = Vendas::select('idFuncionario', DB::raw('count(idFuncionario) as total'))
-        ->whereYear('created_at', $anoAtual)
-        ->whereMonth('created_at', $mesAtual)
-        ->groupBy('idFuncionario')
-        ->orderBy('total', 'desc')
-        ->first();
+            ->whereYear('created_at', $anoAtual)
+            ->whereMonth('created_at', $mesAtual)
+            ->groupBy('idFuncionario')
+            ->orderBy('total', 'desc')
+            ->first();
 
-        if($funcionarioDoMes){
+        if ($funcionarioDoMes) {
             $funcionarioDoMes = Funcionario::find($funcionarioDoMes->idFuncionario);
             $funcionarioMes = $funcionarioDoMes->nomeFuncionario;
-        }else{
+        } else {
             $funcionarioDoMes == null;
             $funcionarioMes = $funcionarioDoMes;
         }
 
 
         $faturamento = Vendas::whereMonth('created_at', $mesAtual)
-        ->whereYear('created_at', $anoAtual)
-        ->sum('valorVenda');
+            ->whereYear('created_at', $anoAtual)
+            ->sum('valorVenda');
 
-        if($funcionarioMes){
-        $faturamentoF = Vendas::whereMonth('created_at', $mesAtual)
-        ->whereYear('created_at', $anoAtual)
-        ->where('idFuncionario', $funcionarioDoMes->id)
-        ->sum('valorVenda');
-        }else{
+        if ($funcionarioMes) {
+            $faturamentoF = Vendas::whereMonth('created_at', $mesAtual)
+                ->whereYear('created_at', $anoAtual)
+                ->where('idFuncionario', $funcionarioDoMes->id)
+                ->sum('valorVenda');
+        } else {
             $faturamentoF = '0';
         }
 
@@ -701,18 +747,18 @@ class GerenteController extends Controller
 
         $estoque = $produto->estoqueProduto - $request->qntVenda;
 
-       if($estoque > 0){
+        if ($estoque > 0) {
 
-        $produto->update([
-            'estoqueProduto' => $estoque,
-        ]);
-       } else{
+            $produto->update([
+                'estoqueProduto' => $estoque,
+            ]);
+        } else {
 
-        $produto->update([
-            'estoqueProduto' => $estoque,
-            'statusProduto' => 'inativo',
-        ]);
-       }
+            $produto->update([
+                'estoqueProduto' => $estoque,
+                'statusProduto' => 'inativo',
+            ]);
+        }
 
 
 
@@ -727,7 +773,6 @@ class GerenteController extends Controller
         $produtos = Produtos::get();
 
         return view('dashboard.gerente.adcProduto', compact('produtos'));
-
     }
 
 
@@ -786,10 +831,10 @@ class GerenteController extends Controller
         return redirect()->route('gerente.vendas');
     }
 
-    public function produtoEsgotado(){
+    public function produtoEsgotado()
+    {
         $produtos = Produtos::where('statusProduto', 'inativo')->where('estoqueProduto', '<=', 0)->get();
         return view('dashboard.gerente.esgotado', compact('produtos'));
-
     }
 
 
@@ -799,7 +844,6 @@ class GerenteController extends Controller
         $produto = Produtos::findOrFail($id);
 
         return view('dashboard.gerente.updateProduto', compact('produto'));
-
     }
 
 
@@ -854,35 +898,33 @@ class GerenteController extends Controller
 
 
 
-        if($request->file('fotoProduto') == null)
-        {
+        if ($request->file('fotoProduto') == null) {
             $imagem_url = "SEM IMAGEM";
-
-        }else{
-        if ($produto === null) {
-            return response()->json(['error' => 'Impossível realizar a operação. O produto não existe'], 404);
-        }
-
-        // dd($request->file('fotoProduto'));
-
-        if ($request->hasFile('fotoProduto') && $request->file('fotoProduto')->isValid()) {
-            // Remover a imagem antiga, se existir
-            if ($produto->fotoProduto) {
-                Storage::disk('public')->delete($produto->fotoProduto);
+        } else {
+            if ($produto === null) {
+                return response()->json(['error' => 'Impossível realizar a operação. O produto não existe'], 404);
             }
 
+            // dd($request->file('fotoProduto'));
+
+            if ($request->hasFile('fotoProduto') && $request->file('fotoProduto')->isValid()) {
+                // Remover a imagem antiga, se existir
+                if ($produto->fotoProduto) {
+                    Storage::disk('public')->delete($produto->fotoProduto);
+                }
+
+                // Salvar a nova imagem
+                $imagem = $request->file('fotoProduto');
+                $imagem_url = $imagem->store('imagem', 'public');
+            }
+
+
+            // dd($request->input('fotoFuncionario'));
             // Salvar a nova imagem
+            // dd($request->file('fotoProduto'));
+
             $imagem = $request->file('fotoProduto');
             $imagem_url = $imagem->store('imagem', 'public');
-        }
-
-
-        // dd($request->input('fotoFuncionario'));
-        // Salvar a nova imagem
-        // dd($request->file('fotoProduto'));
-
-        $imagem = $request->file('fotoProduto');
-        $imagem_url = $imagem->store('imagem', 'public');
         }
         // dd($produto);
         $produto->update([
@@ -908,21 +950,21 @@ class GerenteController extends Controller
         $funcionario = Funcionario::find($idFuncionario);
 
         $agendamento = Agendamento::whereYear('dataAgendamento', $anoAtual)
-        ->whereMonth('dataAgendamento', $mesAtual)
-        ->orderBy('dataAgendamento', 'asc')
-        ->orderBy('horarioInicial', 'asc')
-        ->get();
+            ->whereMonth('dataAgendamento', $mesAtual)
+            ->orderBy('dataAgendamento', 'asc')
+            ->orderBy('horarioInicial', 'asc')
+            ->get();
 
         $horarios = Horario::orderBy('horarios', 'asc')->get();
 
 
-        if(!$agendamento){
+        if (!$agendamento) {
             abort(404, 'Agendamento não encontrado');
         }
 
 
 
-        return view('dashboard.gerente.agendamentos', compact('funcionario','agendamento', 'horarios'));
+        return view('dashboard.gerente.agendamentos', compact('funcionario', 'agendamento', 'horarios'));
     }
 
     public function horarioDeletar($id)
@@ -931,7 +973,6 @@ class GerenteController extends Controller
         $horario->delete();
 
         return view('dashboard.gerente.agendamentos');
-
     }
 
     public function horarioEditar($id)
@@ -939,7 +980,6 @@ class GerenteController extends Controller
         $horario = Horario::find($id);
 
         return view('dashboard.gerente.editHorario', compact('horario'));
-
     }
 
     public function adcHorario()
@@ -954,7 +994,7 @@ class GerenteController extends Controller
 
         $request->validate([
             'horarios' => 'required|date_format:H:i'
-        ],[
+        ], [
             'horarios.required' => 'O campo de horário precisa ser preenchido!',
             'horarios.date_format' => 'O horário precisa estar no formato "hora:minuto"'
         ]);
@@ -973,7 +1013,7 @@ class GerenteController extends Controller
 
         $request->validate([
             'horarios' => 'required|date_format:H:i'
-        ],[
+        ], [
             'horarios.required' => 'O campo de horário precisa ser preenchido!',
             'horarios.date_format' => 'O horário precisa estar no formato "hora:minuto"'
         ]);
@@ -983,7 +1023,6 @@ class GerenteController extends Controller
         ]);
 
         return redirect()->route('gerente.agendamento');
-
     }
 
 
@@ -999,7 +1038,7 @@ class GerenteController extends Controller
 
 
 
-        return view('dashboard.gerente.editFunc', compact('funcionario','senha'));
+        return view('dashboard.gerente.editFunc', compact('funcionario', 'senha'));
     }
 
 
@@ -1012,7 +1051,8 @@ class GerenteController extends Controller
         return view('dashboard.gerente.servicos', compact('servico'));
     }
 
-    public function adicionarServico(){
+    public function adicionarServico()
+    {
 
         return view('dashboard.gerente.adicionar-servico');
     }
@@ -1022,7 +1062,6 @@ class GerenteController extends Controller
         $servico = Servico::where('statusServico', 'inativo')->get();
 
         return view('dashboard.gerente.servInativos', compact('servico'));
-
     }
 
 
@@ -1034,110 +1073,111 @@ class GerenteController extends Controller
     }
 
     public function updateServico(Request $request, $id)
-{
-    $servico = Servico::find($id);
+    {
+        $servico = Servico::find($id);
 
-    if ($servico === null) {
-        return response()->json(['error' => 'Impossível realizar a operação. O serviço não existe'], 404);
-    }
-
-
-
-
-
-    $request->validate([
-        // 'fotoServico' => 'required|max:255',
-        'nomeServico' => 'required|string|max:150',
-        'descricaoServico' => 'required|string|max:255',
-        'valorServico' => 'required|numeric|min:1',
-        'duracaoServico' => 'required|date_format:H:i:s',
-        'statusServico' => 'required',
-    ], [
-        // 'fotoServico.required' => 'O campo de foto é obrigatório.',
-
-        'nomeServico.required' => 'O campo nome é obrigatório.',
-        'nomeServico.string' => 'O campo nome deve ser uma string.',
-        'nomeServico.max' => 'O campo nome não pode ter mais de 150 caracteres.',
-
-        'descricaoServico.required' => 'O campo descrição deve ser preenchido.',
-        'descricaoServico.max' => 'O campo descrição não pode ter mais de 255 caracteres.',
-
-        'valorServico.required' => 'O campo de valor deve ser preenchido.',
-        'valorServico.numeric' => 'O campo de valor deve ser numérico.',
-        'valorServico.min' => 'O campo de valor deve ter uma quantidade maior.',
-
-        'duracaoServico.required' => 'O campo de valor deve ser preenchido.',
-        'duracaoServico.date_format' => 'O campo de duracao precisa estar no formato "hora:minuto:segundo"',
-
-        'statusServico.required' => 'O campo de valor deve ser preenchido.',
-
-    ]);
-
-
-
-
-
-    $imagem_url = $servico->fotoServico; // Manter a URL da imagem antiga se não houver nova imagem
-
-    if ($request->hasFile('fotoServico') && $request->file('fotoServico')->isValid()) {
-        // Remover a imagem antiga, se existir
-        if ($servico->fotoServico) {
-            Storage::disk('public')->delete($servico->fotoServico);
+        if ($servico === null) {
+            return response()->json(['error' => 'Impossível realizar a operação. O serviço não existe'], 404);
         }
 
-        // Salvar a nova imagem
-        $imagem = $request->file('fotoServico');
-        $imagem_url = $imagem->store('imagem', 'public');
+
+
+
+
+        $request->validate([
+            // 'fotoServico' => 'required|max:255',
+            'nomeServico' => 'required|string|max:150',
+            'descricaoServico' => 'required|string|max:255',
+            'valorServico' => 'required|numeric|min:1',
+            'duracaoServico' => 'required|date_format:H:i:s',
+            'statusServico' => 'required',
+        ], [
+            // 'fotoServico.required' => 'O campo de foto é obrigatório.',
+
+            'nomeServico.required' => 'O campo nome é obrigatório.',
+            'nomeServico.string' => 'O campo nome deve ser uma string.',
+            'nomeServico.max' => 'O campo nome não pode ter mais de 150 caracteres.',
+
+            'descricaoServico.required' => 'O campo descrição deve ser preenchido.',
+            'descricaoServico.max' => 'O campo descrição não pode ter mais de 255 caracteres.',
+
+            'valorServico.required' => 'O campo de valor deve ser preenchido.',
+            'valorServico.numeric' => 'O campo de valor deve ser numérico.',
+            'valorServico.min' => 'O campo de valor deve ter uma quantidade maior.',
+
+            'duracaoServico.required' => 'O campo de valor deve ser preenchido.',
+            'duracaoServico.date_format' => 'O campo de duracao precisa estar no formato "hora:minuto:segundo"',
+
+            'statusServico.required' => 'O campo de valor deve ser preenchido.',
+
+        ]);
+
+
+
+
+
+ // Manter a URL da imagem antiga se não houver nova imagem
+
+        if ($request->hasFile('fotoServico') && $request->file('fotoServico')->isValid()) {
+            // Remover a imagem antiga, se existir
+            if ($servico->fotoServico) {
+                Storage::disk('public')->delete($servico->fotoServico);
+            }
+
+            // Salvar a nova imagem
+            $imagem = $request->file('fotoServico');
+            $imagem_url = $imagem->store('imagem', 'public');
+        }else{
+            $imagem_url = $servico->fotoServico;
+        }
+
+        // Atualizar o serviço com os novos dados, incluindo a URL da imagem
+        $servico->update([
+            'fotoServico' => $imagem_url,
+            'nomeServico' => $request->input('nomeServico'),
+            'valorServico' => $request->input('valorServico'),
+            'descricaoServico' => $request->input('descricaoServico'),
+            'duracaoServico' => $request->input('duracaoServico'),
+            'statusServico' => $request->input('statusServico'),
+        ]);
+
+        return redirect()->route('gerente.servicos')->with('success', 'Serviço atualizado com sucesso.');
     }
 
-    // Atualizar o serviço com os novos dados, incluindo a URL da imagem
-    $servico->update([
-        'fotoServico' => $imagem_url,
-        'nomeServico' => $request->input('nomeServico'),
-        'valorServico' => $request->input('valorServico'),
-        'descricaoServico' => $request->input('descricaoServico'),
-        'duracaoServico' => $request->input('duracaoServico'),
-        'statusServico' => $request->input('statusServico'),
-    ]);
 
-    return redirect()->route('gerente.servicos')->with('success', 'Serviço atualizado com sucesso.');
-}
+    public function updateStatusServicoDesativar(Request $request, $id)
+    {
 
+        $servico = Servico::find($id);
 
-public function updateStatusServicoDesativar(Request $request, $id)
-{
+        if ($servico === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O servico não existe!'], 404);
+        }
 
-    $servico = Servico::find($id);
+        // dd($request->statusServico);
 
-    if ($servico === null) {
-        return response()->json(['erro' => 'Impossível realizar a atualização. O servico não existe!'], 404);
+        $servico->update([
+            'statusServico' => $request->statusServico
+        ]);
+
+        return redirect()->route('gerente.servicos')->with('success', 'Serviço atualizado com sucesso.');
     }
+    public function updateStatusServicoAtivar(Request $request, $id)
+    {
+        $servico = Servico::find($id);
 
-    // dd($request->statusServico);
+        if ($servico === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O servico não existe!'], 404);
+        }
+        // dd($request->statusServico);
 
-    $servico->update([
-        'statusServico' => $request->statusServico
-    ]);
 
-    return redirect()->route('gerente.servicos')->with('success', 'Serviço atualizado com sucesso.');
-}
-public function updateStatusServicoAtivar(Request $request, $id)
-{
-    $servico = Servico::find($id);
+        $servico->update([
+            'statusServico' => $request->statusServico
+        ]);
 
-    if ($servico === null) {
-        return response()->json(['erro' => 'Impossível realizar a atualização. O servico não existe!'], 404);
+        return redirect()->route('gerente.servInativos')->with('success', 'Serviço atualizado com sucesso.');;
     }
-    // dd($request->statusServico);
-
-
-    $servico->update([
-        'statusServico' => $request->statusServico
-    ]);
-
-    return redirect()->route('gerente.servInativos')->with('success', 'Serviço atualizado com sucesso.');;
-
-}
 
 
 
@@ -1156,8 +1196,8 @@ public function updateStatusServicoAtivar(Request $request, $id)
      * @return \Illuminate\Http\Response
      */
 
-     public function storeServico(Request $request)
-     {
+    public function storeServico(Request $request)
+    {
 
 
         $request->validate([
@@ -1189,25 +1229,25 @@ public function updateStatusServicoAtivar(Request $request, $id)
         ]);
 
 
-         $imagem = $request->file('fotoServico');
+        $imagem = $request->file('fotoServico');
 
-         if ($imagem == null) {
-             $imagem_url = 'SEM IMAGEM';
-         } else {
-             $imagem_url = $imagem->store('imagem', 'public');
-         }
+        if ($imagem == null) {
+            $imagem_url = 'SEM IMAGEM';
+        } else {
+            $imagem_url = $imagem->store('imagem', 'public');
+        }
 
-         $servico = new Servico();
-         $servico->fotoServico = $imagem_url;
-         $servico->nomeServico = $request->input('nomeServico');
-         $servico->descricaoServico = $request->input('descricaoServico');
-         $servico->valorServico = $request->input('valorServico');
-         $servico->duracaoServico = $request->input('duracaoServico');
-         $servico->statusServico = $request->input('statusServico');
-         $servico->save();
+        $servico = new Servico();
+        $servico->fotoServico = $imagem_url;
+        $servico->nomeServico = $request->input('nomeServico');
+        $servico->descricaoServico = $request->input('descricaoServico');
+        $servico->valorServico = $request->input('valorServico');
+        $servico->duracaoServico = $request->input('duracaoServico');
+        $servico->statusServico = $request->input('statusServico');
+        $servico->save();
 
-         return redirect()->route('gerente.servicos');
-     }
+        return redirect()->route('gerente.servicos');
+    }
 
 
 
@@ -1233,7 +1273,7 @@ public function updateStatusServicoAtivar(Request $request, $id)
         // return $aluno;
 
 
-         // Para não pegar imagem será apenas isso
+        // Para não pegar imagem será apenas isso
 
         //  $request->validate($this->funcionario->Regras(), $this->funcionario->Feedback());
 
@@ -1319,47 +1359,47 @@ public function updateStatusServicoAtivar(Request $request, $id)
 
 
 
-         $dddFuncionario = $request->input('dddFuncionario');
-         $telefoneFuncionario = $request->input('telefoneFuncionario');
-         $numeroFuncionario = "$dddFuncionario$telefoneFuncionario";
+        $dddFuncionario = $request->input('dddFuncionario');
+        $telefoneFuncionario = $request->input('telefoneFuncionario');
+        $numeroFuncionario = "$dddFuncionario$telefoneFuncionario";
 
         //  dd($request->file('fotoFuncionario'));
 
         $imagem = $request->file('fotoFuncionario');
-         if($imagem == null){
+        if ($imagem == null) {
             $imagem_url = 'SEM IMAGEM';
-         }else{
-         $imagem_url = $imagem->store('imagem','public');
-         }
+        } else {
+            $imagem_url = $imagem->store('imagem', 'public');
+        }
         //  dd($imagem_url);
 
         //  $imagem_url = $imagem->store('imagem','public');
-         $funcionario = $this->funcionario;
-         $funcionario->fotoFuncionario = $imagem_url;
-         $funcionario->nomeFuncionario = $request->input('nomeFuncionario');
-         $funcionario->sobrenomeFuncionario = $request->input('sobrenomeFuncionario');
-         $funcionario->numeroFuncionario = $numeroFuncionario;
-         $funcionario->emailFuncionario = $request->input('emailFuncionario');
-         $funcionario->especialidadeFuncionario = $request->input('especialidadeFuncionario');
-         $funcionario->inicioExpedienteFuncionario = $request->input('inicioExpedienteFuncionario');
-         $funcionario->fimExpedienteFuncionario = $request->input('fimExpedienteFuncionario');
-         $funcionario->salarioFuncionario = $request->input('salarioFuncionario');
-         $funcionario->cargoFuncionario = $request->input('cargoFuncionario');
-         $funcionario->statusFuncionario = $request->input('statusFuncionario');
-         $funcionario->dataNascFuncionario = $request->input('dataNascFuncionario');
-         $funcionario->descricaoFuncionario = $request->input('descricaoFuncionario');
-         $funcionario->qntCortesFuncionario = '0';
-         $funcionario->save();
+        $funcionario = $this->funcionario;
+        $funcionario->fotoFuncionario = $imagem_url;
+        $funcionario->nomeFuncionario = $request->input('nomeFuncionario');
+        $funcionario->sobrenomeFuncionario = $request->input('sobrenomeFuncionario');
+        $funcionario->numeroFuncionario = $numeroFuncionario;
+        $funcionario->emailFuncionario = $request->input('emailFuncionario');
+        $funcionario->especialidadeFuncionario = $request->input('especialidadeFuncionario');
+        $funcionario->inicioExpedienteFuncionario = $request->input('inicioExpedienteFuncionario');
+        $funcionario->fimExpedienteFuncionario = $request->input('fimExpedienteFuncionario');
+        $funcionario->salarioFuncionario = $request->input('salarioFuncionario');
+        $funcionario->cargoFuncionario = $request->input('cargoFuncionario');
+        $funcionario->statusFuncionario = $request->input('statusFuncionario');
+        $funcionario->dataNascFuncionario = $request->input('dataNascFuncionario');
+        $funcionario->descricaoFuncionario = $request->input('descricaoFuncionario');
+        $funcionario->qntCortesFuncionario = '0';
+        $funcionario->save();
 
-         $usuario = $this->usuario;
-         $usuario->nome = $request->input('nomeFuncionario');
-         $usuario->senha = $request->input('senhaFuncionario');
-         $usuario->email = $request->input('emailFuncionario');
-         $usuario->tipo_usuario_id = $funcionario->id;
-         $usuario->tipo_usuario_type = 'funcionario';
-         $usuario->email_verificado_em = $funcionario->created_at;
-         $usuario->token_lembrete = '000';
-         $usuario->save();
+        $usuario = $this->usuario;
+        $usuario->nome = $request->input('nomeFuncionario');
+        $usuario->senha = $request->input('senhaFuncionario');
+        $usuario->email = $request->input('emailFuncionario');
+        $usuario->tipo_usuario_id = $funcionario->id;
+        $usuario->tipo_usuario_type = 'funcionario';
+        $usuario->email_verificado_em = $funcionario->created_at;
+        $usuario->token_lembrete = '000';
+        $usuario->save();
 
         //     'nomeFuncionario' => $request->nomeFuncionario,
         //     'sobrenomeFuncionario' => $request->sobrenomeFuncionario,

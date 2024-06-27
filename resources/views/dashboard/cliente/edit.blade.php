@@ -12,8 +12,8 @@
 
 
         /* ==========================================================================
-       #FONT
-       ========================================================================== */
+           #FONT
+           ========================================================================== */
         .font-robo {
             font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
         }
@@ -27,8 +27,8 @@
         }
 
         /* ==========================================================================
-       #GRID
-       ========================================================================== */
+           #GRID
+           ========================================================================== */
         .row {
             display: -webkit-box;
             display: -webkit-flex;
@@ -168,16 +168,16 @@
         }
 
         /* ==========================================================================
-       #BOX-SIZING
-       ========================================================================== */
+           #BOX-SIZING
+           ========================================================================== */
         /**
-     * More sensible default box-sizing:
-     * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
-     */
+         * More sensible default box-sizing:
+         * css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
+         */
 
         /* ==========================================================================
-       #BACKGROUND
-       ========================================================================== */
+           #BACKGROUND
+           ========================================================================== */
         .bg-blue {
             background: #2c6ed5;
         }
@@ -211,8 +211,8 @@
         }
 
         /* ==========================================================================
-       #SPACING
-       ========================================================================== */
+           #SPACING
+           ========================================================================== */
         .p-t-100 {
             padding-top: 100px;
         }
@@ -266,8 +266,8 @@
         }
 
         /* ==========================================================================
-       #WRAPPER
-       ========================================================================== */
+           #WRAPPER
+           ========================================================================== */
         .wrapper {
             margin: 0 auto;
         }
@@ -289,8 +289,8 @@
         }
 
         /* ==========================================================================
-       #BUTTON
-       ========================================================================== */
+           #BUTTON
+           ========================================================================== */
         .btn {
             display: inline-block;
             line-height: 50px;
@@ -350,8 +350,8 @@
         }
 
         /* ==========================================================================
-       #DATE PICKER
-       ========================================================================== */
+           #DATE PICKER
+           ========================================================================== */
         td.active {
             background-color: #2c6ed5;
         }
@@ -402,8 +402,8 @@
         }
 
         /* ==========================================================================
-       #FORM
-       ========================================================================== */
+           #FORM
+           ========================================================================== */
         input {
             outline: none;
             margin: 0;
@@ -533,8 +533,8 @@
         }
 
         /* ==========================================================================
-       #SELECT2
-       ========================================================================== */
+           #SELECT2
+           ========================================================================== */
         .select--no-search .select2-search {
             display: none !important;
         }
@@ -626,8 +626,8 @@
         }
 
         /* ==========================================================================
-       #TITLE
-       ========================================================================== */
+           #TITLE
+           ========================================================================== */
         .title {
             font-size: 24px;
             text-transform: uppercase;
@@ -637,8 +637,8 @@
         }
 
         /* ==========================================================================
-       #CARD
-       ========================================================================== */
+           #CARD
+           ========================================================================== */
         .card {
             -webkit-border-radius: 3px;
             -moz-border-radius: 3px;
@@ -779,43 +779,43 @@
         }
 
         .radio-inputs {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 0.5rem;
-  background-color: #EEE;
-  box-sizing: border-box;
-  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
-  padding: 0.25rem;
-  width: 300px;
-  font-size: 14px;
-}
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            border-radius: 0.5rem;
+            background-color: #EEE;
+            box-sizing: border-box;
+            box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+            padding: 0.25rem;
+            width: 300px;
+            font-size: 14px;
+        }
 
-.radio-inputs .radio {
-  flex: 1 1 auto;
-  text-align: center;
-}
+        .radio-inputs .radio {
+            flex: 1 1 auto;
+            text-align: center;
+        }
 
-.radio-inputs .radio input {
-  display: none;
-}
+        .radio-inputs .radio input {
+            display: none;
+        }
 
-.radio-inputs .radio .name {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: none;
-  padding: .5rem 0;
-  color: rgba(51, 65, 85, 1);
-  transition: all .15s ease-in-out;
-}
+        .radio-inputs .radio .name {
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            border: none;
+            padding: .5rem 0;
+            color: rgba(51, 65, 85, 1);
+            transition: all .15s ease-in-out;
+        }
 
-.radio-inputs .radio input:checked + .name {
-  background-color: #fff;
-  font-weight: 600;
-}
+        .radio-inputs .radio input:checked+.name {
+            background-color: #fff;
+            font-weight: 600;
+        }
     </style>
 
     <div data-aos="fade-left" class="container" style="margin-top: 5%;">
@@ -832,7 +832,8 @@
 
     <div data-aos="fade-left" class="card card-5">
         <div class="card-body" style="height: 600px;">
-            <form method="POST" action="{{ route('cliente.update', ['id' => $cliente->id]) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('cliente.update', ['id' => $cliente->id]) }}"
+                enctype="multipart/form-data">
 
                 @csrf
                 @method('PUT')
@@ -853,25 +854,28 @@
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group-desc">
-                                    <input class="input--style-5" type="text" value="{{ $cliente->nomeCliente }}"
-                                        required @error('nomeCliente') is-invalid @enderror id="nomeCliente"
-                                        name="nomeCliente" required maxlength="100">
-                                    @error('nomeCliente')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                    <input class="input--style-5" type="text"
+                                        value="{{ $cliente->nomeCliente }}"id="nomeCliente" name="nomeCliente">
                                     <label class="label--desc">Nome</label>
+
+
+
+                                    @error('nomeCliente')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group-desc">
-                                    <input class="input--style-5" type="text"
-                                        value="{{ $cliente->sobrenomeCliente }}"
-                                        @error('sobrenomeCliente') is-invalid @enderror id="sobrenomeCliente"
-                                        name="sobrenomeCliente" required maxlength="100">
-                                    @error('sobrenomeCliente')
-                                        <span class="invalid-feedback">{{ $message }}</span>
-                                    @enderror
+                                    <input class="input--style-5" type="text" value="{{ $cliente->sobrenomeCliente }}"
+                                        id="sobrenomeCliente" name="sobrenomeCliente">
                                     <label class="label--desc">Sobrenome</label>
+
+
+
+                                    @error('sobrenomeCliente')
+                                        <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -882,21 +886,25 @@
                     <div class="col-2" style="width: 250px;display: flex;">
                         <div class="input-group-desc">
                             <input class="input--style-5" style="width:640px;" type="text"
-                                value="{{ $cliente->emailCliente }}" @error('emailCliente') is-invalid @enderror
-                                id="emailCliente" name="emailCliente" required maxlength="100">
-                            @error('emailCliente')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                value="{{ $cliente->emailCliente }}" id="emailCliente" name="emailCliente">
                             <label class="label--desc">Email</label>
+
+
+
+                            @error('emailCliente')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="input-group-desc" style="margin-left: 20%;">
-                            <input class="input--style-5" style="width:500px;" type="password"
-                                value="{{ $senha->senha }}" @error('senhaCliente') is-invalid @enderror
-                                id="senhaCliente" name="senhaCliente" required maxlength="100">
-                            @error('senhaCliente')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                            <input class="input--style-5" style="width:500px;" type="password" value="{{ $senha->senha }}"
+                                id="senhaCliente" name="senhaCliente">
                             <label class="label--desc">Senha</label>
+
+
+
+                            @error('senhacliente')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -905,26 +913,27 @@
                     <div class="col-2" style="width: 100px;display: flex;">
                         <div class="input-group-desc">
                             <input class="input--style-5" style="width:100px;" type="text"
-                            @php
-                                $testeDD = '(' . substr($cliente->telefoneCliente, 0, 2) . ')'
-                            @endphp
-                                value="{{ $testeDD }}"
-                                @error('dddCliente') is-invalid @enderror id="dddCliente"
-                                name="dddCliente" required maxlength="100">
-                            @error('dddCliente')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                @php $testeDD = '(' . substr($cliente->telefoneCliente, 0, 2) . ')' @endphp
+                                value="{{ $testeDD }}" id="dddCliente" name="dddCliente">
                             <label class="label--desc">DDD</label>
+
+
+
+                            @error('dddCiente')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="input-group-desc" style="margin-left: 10%;">
                             <input class="input--style-5" style="width:300px;" type="text"
                                 value="{{ substr($cliente->telefoneCliente, 2, 5) . '-' . substr($cliente->telefoneCliente, 7) }}"
-                                @error('telefoneCliente') is-invalid @enderror id="telefoneCliente"
-                                name="telefoneCliente" required maxlength="100">
-                            @error('telefoneCliente')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
+                                id="telefoneCliente" name="telefoneCliente">
                             <label class="label--desc">Número Telefone</label>
+
+
+
+                            @error('telefoneCliente')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -933,11 +942,12 @@
                     <div class="col-1" style="width: 50px;display: flex;">
                         <div class="input-group-desc" style="margin-left: 0%;">
                             <input class="input--style-5" style="width:300px;" type="text"
-                                value="{{ $cliente->enderecoCliente }}"
-                                @error('enderecoCliente') is-invalid @enderror id="enderecoCliente"
-                                name="enderecoCliente" required maxlength="100">
-                            @error('telefoneCliente')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                value="{{ $cliente->enderecoCliente }}"id="enderecoCliente" name="enderecoCliente">
+                            <label class="label--desc">Nome da rua</label>
+
+
+                            @error('enderecoCliente')
+                                <div class="alert alert-danger" style="color:white;">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
