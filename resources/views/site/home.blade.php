@@ -518,7 +518,7 @@
                                 </path>
                             </svg>
                             <span class="texts">
-                                <span class="text-1">GET IT ON</span>
+                                <span class="text-1">Obtenha agora nas</span>
                                 <span class="text-2">Google Play</span>
                             </span>
                         </a>

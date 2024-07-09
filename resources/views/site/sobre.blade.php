@@ -5,6 +5,26 @@
 @section('conteudo')
 
 
+<style>
+
+
+.about-g{
+    margin-top: 40px;
+    max-width: 900px
+}
+
+ .about-g p{
+    background-color: #ff6d26;
+    padding: 10px 20px;
+    color: white;
+ }
+ .about-g img{
+    max-width: 500px;
+    max-height: 800px;
+ }
+
+</style>
+
     <section class="site-hero overlay" data-stellar-background-ratio="0.5"
         style="background-image: url(images/big_image_1.jpg);">
         <div class="container">
@@ -64,28 +84,23 @@
     <!-- END section -->
 
 
-    <section class="sobreNos">
-
-
-        <div>
-            <h1>Sobre nós</h1>
-            <p> Há mais de três décadas, um jovem visionário de nome Edward Morgenstern teve um sonho: criar um espaço onde
+    <section class="d-flex justify-content-center">
+        <div class="d-flex container-fluid about-g">
+            <p class="container">Há mais de três décadas, um jovem visionário de nome Edward Morgenstern teve um sonho: criar um espaço onde
                 os homens pudessem não apenas cuidar de sua aparência, mas também encontrar camaradagem, conforto e
                 confiança. Esse sonho se tornou realidade em 1989, quando Edward abriu as portas da Royal Barber pela
                 primeira vez.<br>Localizada em um modesto espaço no centro da cidade, a Royal Barber rapidamente ganhou reputação como o
                 local onde os cavalheiros mais exigentes encontravam serviços de qualidade inigualável. Com seu olhar afiado
                 para cortes clássicos e seu compromisso inabalável com a excelência, Edward atraiu uma clientela fiel que
                 vinha de todas as partes em busca de sua expertise.</p>
+
+                <div>
+
+                    <img src="{{ asset('images/sobre.jpeg') }}" alt="">
+
+                </div>
         </div>
-
-        <div>
-
-            <img src="{{ asset('images/sobre.jpeg') }}" alt="">
-
-        </div>
-
     </section>
-
 
     <section class="site-section pb-5">
         <div class="container">
