@@ -87,12 +87,48 @@ class FuncionarioController extends Controller
      * @param  \App\Models\Funcionario  $funcionario
      * @return \Illuminate\Http\Response
      */
-    public function show(Funcionario $funcionario)
+    public function showBarbeiros(Funcionario $funcionario)
     {
         $funcionarios = DB::select("SELECT f.id, f.nomeFuncionario, f.sobrenomeFuncionario, f.fotoFuncionario,f.especialidadeFuncionario
         FROM funcionarios f WHERE statusFuncionario = 'ATIVO' AND cargoFuncionario = 'barbeiro'");
 
         return response()->json($funcionarios);
+    }
+
+    public function showHorarios($id){
+
+        $dataHorarios = date('Y-m-d', strtotime("2024-$month-$day"));
+
+        $query = "
+                SELECT h.id AS horario_id, h.horarios
+                FROM horarios h
+                LEFT JOIN (
+                    SELECT a.horario_id,
+                           a.horarioInicial,
+                           a.horarioFinal
+                    FROM agendamento a
+                    JOIN servicos s ON a.servico_id = s.id
+                    WHERE a.funcionario_id = ?
+                    AND a.dataAgendamento = ?
+                    AND a.statusServico != 'CANCELADO'
+                    UNION
+                    SELECT a.horario_id,
+                           a.horarioInicial,
+                           a.horarioFinal
+                    FROM agendamento a
+                    JOIN servicos s ON a.servico_id = s.id
+                    WHERE a.cliente_id = ?
+                    AND a.dataAgendamento = ?
+                    AND a.statusServico != 'CANCELADO'
+                ) a ON h.horarios BETWEEN a.horarioInicial AND a.horarioFinal
+                WHERE a.horario_id IS NULL
+                AND TIME(h.horarios) >= TIME(?)
+                AND ADDTIME(TIME(h.horarios), SEC_TO_TIME(? * 60)) <= TIME(?)
+                ORDER BY horarios ASC;";
+
+            Log::info('Consulta SQL:', ['query' => $query]);
+
+            $horariosDisponiveis = DB::select($query, [$funcionarioId, $dataHorarios, $clienteId, $dataHorarios, $inicioExpediente, $duracaoEmMinutos, $fimExpediente]);
     }
 
     /**
