@@ -95,9 +95,27 @@ class FuncionarioController extends Controller
         return response()->json($funcionarios);
     }
 
-    public function showHorarios($id){
+    public function showHorarios(Request $request){
 
-        $dataHorarios = date('Y-m-d', strtotime("2024-$month-$day"));
+           // Recebendo os parâmetros do request
+            $funcionarioId = $request->input('funcionarioId');
+            $dataHorarios = $request->input('dataHorarios');
+            $clienteId = $request->input('clienteId');
+            $duracaoEmMinutos = $request->input('duracaoEmMinutos');
+
+            // Resgatar o início e fim do expediente do funcionário
+            $funcionario = Funcionario::find($funcionarioId);
+            // dd($funcionario);
+            $inicioExpediente = $funcionario->inicioExpedienteFuncionario;
+            $fimExpediente = $funcionario->fimExpedienteFuncionario;
+
+            // Formatar a data
+            $dataHorarios = date('Y-m-d', strtotime($dataHorarios));
+            $duracaoEmMinutosForm = (strtotime($duracaoEmMinutos) - strtotime('TODAY')) / 60;
+
+            // dd($funcionarioId, $duracaoEmMinutos, $dataHorarios, $clienteId);
+
+        // $dataHorarios = date('Y-m-d', strtotime("2024-$month-$day"));
 
         $query = "
                 SELECT h.id AS horario_id, h.horarios
@@ -126,9 +144,19 @@ class FuncionarioController extends Controller
                 AND ADDTIME(TIME(h.horarios), SEC_TO_TIME(? * 60)) <= TIME(?)
                 ORDER BY horarios ASC;";
 
-            Log::info('Consulta SQL:', ['query' => $query]);
+            // Log::info('Consulta SQL:', ['query' => $query]);
+// dd($duracaoEmMinutosForm, $funcionarioId, $dataHorarios, $clienteId, $inicioExpediente, $fimExpediente);
+            $horariosDisponiveis = DB::select($query, [
+                $funcionarioId,
+                $dataHorarios,
+                $clienteId,
+                $dataHorarios,
+                $inicioExpediente,
+                $duracaoEmMinutosForm,
+                $fimExpediente
+            ]);
 
-            $horariosDisponiveis = DB::select($query, [$funcionarioId, $dataHorarios, $clienteId, $dataHorarios, $inicioExpediente, $duracaoEmMinutos, $fimExpediente]);
+            return response()->json($horariosDisponiveis);
     }
 
     /**

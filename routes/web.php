@@ -150,3 +150,4 @@ Route::post('/loginApi', [LoginController::class, 'login'])->name('login.api');
 Route::get('/agendamento/show/{id}', [AgendamentoController::class, 'show'])->name('show.agendamento');
 
 Route::get('/funcionarios/showBarbeiros', [FuncionarioController::class, 'showBarbeiros'])->name('funcionarios.show');
+Route::get('/horarios/disponiveis', [FuncionarioController::class, 'showHorarios'])->name('horarios.disponiveis');
