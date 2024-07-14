@@ -355,8 +355,8 @@ public function store(Request $request)
     ];
 
 
-    $this->enviarEmailFuncionario($emailFuncionario, $dadosAgendamento);
-    $this->enviarEmailCliente($emailCliente, $dadosAgendamentoCliente);
+    // $this->enviarEmailFuncionario($emailFuncionario, $dadosAgendamento);
+    // $this->enviarEmailCliente($emailCliente, $dadosAgendamentoCliente);
 
 
     return response()->json($agendamento, 200);
@@ -446,7 +446,80 @@ public function store(Request $request)
 
 
 
+    public function storeMobile(Request $request)
+    {
 
+        
+
+
+        $duracaoServico = $this->getDuracaoServico($request->servico_id);
+        $horaInicial = $request->horarioSelecionado;
+        $duracaoEmSegundos = strtotime($duracaoServico) - strtotime('TODAY');
+        $horaInicialEmSegundos = strtotime($horaInicial) - strtotime('TODAY');
+        $horaFinalEmSegundos = $horaInicialEmSegundos + $duracaoEmSegundos - 1;
+        $horaFinal = date('H:i:s', strtotime('TODAY') + $horaFinalEmSegundos);
+
+
+        $agendamento = $this->agendamento->create([
+            'funcionario_id' => $request->funcionario_id,
+            'cliente_id' => $request->cliente_id,
+            'servico_id' => $request->servico_id,
+            'horario_id' => $request->horario_id,
+            'dataAgendamento' => $request->dataAgendamento,
+            'horarioInicial' => $horaInicial,
+            'horarioFinal' => $horaFinal,
+            'statusServico' => 'PENDENTE'
+        ]);
+
+
+        $emailFuncionario = $this->getEmailFuncionario($request->funcionario_id);
+        $nomeCliente = $this->getNomeCliente($request->cliente_id);
+        $sobrenomeCliente = $this->getSobrenomeCliente($request->cliente_id);
+        $telefoneCliente = $this->getTelefoneCliente($request->cliente_id);
+        $telefoneFuncionario = $this->getTelefoneFuncionario($request->cliente_id);
+        $emailCliente = $this->getEmailCliente($request->cliente_id);
+        $nomeServico = $this->getNomeServico($request->servico_id);
+        $descricaoServico = $this->getDescricaoServico($request->servico_id);
+        $nomeFuncionario = $this->getNomeFuncionario($request->funcionario_id);
+        $sobrenomeFuncionario = $this->getSobrenomeFuncionario($request->funcionario_id);
+        $dataAgendamento = $request->dataAgendamento;
+        $dataFormatada = date('d/m/Y', strtotime($dataAgendamento));
+        $horaInformal = $request->horarioSelecionado;
+        $horamensagem = date("H:i", strtotime($horaInformal));
+        $telefoneFormatado = $this->formatarTelefone($telefoneCliente);
+        $telefoneFormatadoF = $this->formatarTelefone($telefoneFuncionario);
+
+
+        $dadosAgendamento = [
+            'cliente_nome' => $nomeCliente,
+            'cliente_sobrenome' => $sobrenomeCliente,
+            'telefoneCliente' => $telefoneFormatado,
+            'emailCliente' => $emailCliente,
+            'descricao_servico' => $descricaoServico,
+            'servico_nome' => $nomeServico,
+            'dataAgendamento' => $dataFormatada,
+            'horarioSelecionado' => $horamensagem,
+            'nomeFuncionario' => $nomeFuncionario,
+        ];
+
+        $dadosAgendamentoCliente = [
+            'nomeCliente' => $nomeCliente,
+            'nomeFuncionario' => $nomeFuncionario,
+            'funcionario_sobrenome' => $sobrenomeFuncionario,
+            'telefoneFuncionario' => $telefoneFormatadoF,
+            'emailFuncionario' => $emailFuncionario,
+            'descricao_servico' => $descricaoServico,
+            'servico_nome' => $nomeServico,
+            'dataAgendamento' => $dataFormatada,
+            'horarioSelecionado' => $horamensagem,
+        ];
+
+
+        // $this->enviarEmailFuncionario($emailFuncionario, $dadosAgendamento);
+        // $this->enviarEmailCliente($emailCliente, $dadosAgendamentoCliente);
+
+        return response()->json($agendamento, 200);
+    }
 
 
 

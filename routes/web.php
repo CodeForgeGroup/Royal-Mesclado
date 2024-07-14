@@ -151,3 +151,5 @@ Route::get('/agendamento/show/{id}', [AgendamentoController::class, 'show'])->na
 
 Route::get('/funcionarios/showBarbeiros', [FuncionarioController::class, 'showBarbeiros'])->name('funcionarios.show');
 Route::get('/horarios/disponiveis', [FuncionarioController::class, 'showHorarios'])->name('horarios.disponiveis');
+
+Route::post('/agendamentos/mobile', [AgendamentoController::class, 'storeMobile']);

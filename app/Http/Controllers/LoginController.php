@@ -127,7 +127,7 @@ class LoginController extends Controller
                             'email' => $cliente->emailCliente,
                         ],
                     ],
-                    'acess_token' => $token,
+                    'access_token' => $token,
                     'token_type' => 'Bearer',
                 ]);
             }
